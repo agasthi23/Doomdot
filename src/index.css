@@ -1,0 +1,267 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-void: #050607;
+    --cyber-lime: #B8E351;
+    --forest-matrix: #23430C;
+    --forest-glow: #1a3309;
+    --matrix-light: #d2f874;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    background-color: #050607;
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  /* Exact Figma Typography Scale */
+  .font-big-heading {
+    font-family: 'Chakra Petch', 'Orbitron', 'Unbounded', sans-serif;
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -0.015em;
+  }
+
+  h1, .text-h1 {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', system-ui, sans-serif;
+    font-size: clamp(34px, 4.5vw, 52px);
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  h2, .text-h2 {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', system-ui, sans-serif;
+    font-size: clamp(28px, 3.5vw, 40px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  h3, .text-h3 {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', system-ui, sans-serif;
+    font-size: clamp(24px, 2.8vw, 32px);
+    line-height: 1.25;
+    font-weight: 600;
+  }
+
+  h4, .text-h4 {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', system-ui, sans-serif;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  h5, .text-h5 {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', system-ui, sans-serif;
+    font-size: 20px;
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  h6, .text-h6 {
+    font-family: 'Plus Jakarta Sans', 'Space Grotesk', system-ui, sans-serif;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .text-paragraph {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    font-weight: 400;
+  }
+
+  .font-display {
+    font-family: 'Chakra Petch', 'Orbitron', 'Unbounded', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
+  .font-tech {
+    font-family: 'Space Grotesk', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Retro-Arcade HUD Overlay & Dot Matrix */
+.dot-matrix {
+  background-size: 24px 24px;
+  background-image: 
+    radial-gradient(circle, rgba(184, 227, 81, 0.08) 1.2px, transparent 1.2px);
+}
+
+.cyber-grid {
+  background-size: 36px 36px;
+  background-image: 
+    linear-gradient(to right, rgba(184, 227, 81, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(184, 227, 81, 0.035) 1px, transparent 1px);
+}
+
+/* Retro arcade subtle scanlines */
+.scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  );
+  background-size: 100% 4px;
+}
+
+/* Cyber Lime & Forest Matrix Glows */
+.lime-glow {
+  box-shadow: 0 0 25px -4px rgba(184, 227, 81, 0.45);
+}
+
+.lime-glow-lg {
+  box-shadow: 0 0 45px -6px rgba(184, 227, 81, 0.55);
+}
+
+.forest-glow {
+  box-shadow: 0 0 35px -8px rgba(35, 67, 12, 0.6);
+}
+
+.border-lime-neon {
+  border-color: #B8E351;
+  box-shadow: 0 0 14px rgba(184, 227, 81, 0.35);
+}
+
+/* Kinetic marquee animations */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0%); }
+}
+
+@keyframes pulse-lime {
+  0%, 100% { opacity: 0.35; filter: blur(50px); }
+  50% { opacity: 0.65; filter: blur(68px); }
+}
+
+@keyframes float-hud {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.hero-neon-chip {
+  animation: hero-float 5s ease-in-out infinite;
+}
+
+.hero-neon-chip--team {
+  top: 24%;
+  right: 4%;
+}
+
+.hero-neon-chip--mvp {
+  top: 56%;
+  right: 1%;
+}
+
+.hero-neon-chip--handover {
+  bottom: 14%;
+  right: 26%;
+}
+
+@keyframes hero-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+.animate-marquee-reverse {
+  display: flex;
+  width: max-content;
+  animation: marquee-reverse 34s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee-reverse:hover {
+  animation-play-state: paused;
+}
+
+.animate-pulse-lime {
+  animation: pulse-lime 5s ease-in-out infinite;
+}
+
+.animate-float-hud {
+  animation: float-hud 6s ease-in-out infinite;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+/* Glitch text effect for arcade feel */
+.text-glitch {
+  text-shadow: 0 0 8px rgba(184, 227, 81, 0.6);
+}
+
+.pulse-dot {
+  animation: dotPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { text-shadow: 0 0 10px #B8E351; }
+  50% { text-shadow: 0 0 28px #B8E351, 0 0 50px #B8E351; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-marquee-reverse,
+  .animate-pulse-lime,
+  .animate-float-hud,
+  .hero-neon-chip,
+  .pulse-dot {
+    animation: none !important;
+  }
+}
+
+/* Custom Cyber Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050607;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a2a0c;
+  border-radius: 3px;
+  border: 1px solid #23430C;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8E351;
+}

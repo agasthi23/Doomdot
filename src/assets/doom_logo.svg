@@ -1,0 +1,46 @@
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Cyber Lime Glow -->
+    <filter id="doomdot-glow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="0" stdDeviation="3.5" flood-color="#B8E351" flood-opacity="0.85" />
+    </filter>
+
+    <!-- Subtle Distress Texture Filter -->
+    <filter id="doomdot-distress">
+      <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="3" result="noise" />
+      <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.22 0" />
+      <feComposite in2="SourceGraphic" in="glitch" operator="in" />
+    </filter>
+
+    <!-- Acid Cyber Lime Gradient -->
+    <linearGradient id="doomdot-lime-grad" x1="18%" y1="24%" x2="74%" y2="76%">
+      <stop offset="0%" stop-color="#C6F848" />
+      <stop offset="60%" stop-color="#B4E834" />
+      <stop offset="100%" stop-color="#9AD422" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main Chiseled Monogram "D" in Cyber Lime -->
+  <path
+    fill-rule="evenodd"
+    clip-rule="evenodd"
+    d="M 18 24 L 58 24 L 74 40 L 74 60 L 58 76 L 18 76 L 18 62 L 34 50 L 18 38 L 18 24 Z M 36 38 L 50 38 L 62 50 L 50 62 L 36 62 L 46 50 L 36 38 Z"
+    fill="url(#doomdot-lime-grad)"
+    filter="url(#doomdot-glow)"
+  />
+
+  <!-- Subtle Architectural Chisel Facet Seam Lines -->
+  <path d="M 34 50 L 46 50" stroke="#081004" stroke-width="1.2" stroke-linecap="round" opacity="0.65" />
+  <path d="M 50 38 L 58 24" stroke="#081004" stroke-width="1.2" stroke-linecap="round" opacity="0.5" />
+  <path d="M 50 62 L 58 76" stroke="#081004" stroke-width="1.2" stroke-linecap="round" opacity="0.5" />
+  <path d="M 62 50 L 74 50" stroke="#081004" stroke-width="1.2" stroke-linecap="round" opacity="0.5" />
+
+  <!-- The White Dot (Completing "D." for DoomDot) -->
+  <circle
+    cx="84"
+    cy="68"
+    r="8.5"
+    fill="#FFFFFF"
+    filter="drop-shadow(0 0 5px rgba(255,255,255,0.7))"
+  />
+</svg>

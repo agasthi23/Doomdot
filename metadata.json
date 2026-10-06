@@ -1,0 +1,6 @@
+{
+  "name": "Doomdot | Elite Tech Startup & Engineering Guild",
+  "description": "Portfolio and client quest launchpad for Doomdot — a 4-engineer high-velocity tech startup delivering production SaaS, mobile apps, AI pipelines, and interactive web experiences.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
