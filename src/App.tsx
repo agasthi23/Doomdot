@@ -15,6 +15,7 @@ import { ExtendedServicesPage } from './components/ExtendedServicesPage.tsx';
 import DotIntro from './components/DotIntro.tsx';
 import RobotCompanion from './components/RobotCompanion.tsx';
 import type { Stage } from './components/RobotCompanion.tsx';
+import { StatsSection } from './components/StatsSection.tsx';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'services-extended'>('home');
@@ -129,6 +130,11 @@ export default function App() {
         <main>
           {/* 1. Introduction // Who We Are (Hero with 3D Swarm & Floating Neon Computer) */}
           <HeroNeon onOpenTerminal={handleOpenTerminal} />
+
+          {/* Stats */}
+          <div className=" pt-50">
+            <StatsSection />
+          </div>
 
           {/* 2. What We Do // Short & Sweet In-Place Stepper Services */}
           <ServicesSection
