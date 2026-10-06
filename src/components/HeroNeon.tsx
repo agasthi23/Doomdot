@@ -4,12 +4,6 @@ import { RobotAnchor } from './RobotCompanion.tsx';
 
 const LIME = '#B8E351';
 
-const chips = [
-  { text: '2 Software Engineers & 2 Computer Scientists', position: 'hero-neon-chip--team', delay: '0s' },
-  { text: '14-Day Production MVPs', position: 'hero-neon-chip--mvp', delay: '1.2s' },
-  { text: '100% Code & IP Handover', position: 'hero-neon-chip--handover', delay: '2.4s' },
-];
-
 interface HeroNeonProps {
   onOpenTerminal: () => void;
 }
@@ -38,6 +32,9 @@ export default function HeroNeon({ onOpenTerminal }: HeroNeonProps) {
           WebkitBackgroundClip: 'text',
           backgroundClip: 'text',
           color: 'transparent',
+          fontSize: 'min(16vw, 28rem)',
+          fontWeight: 800,
+          whiteSpace: 'nowrap',
         }}
       >
         DOOMDOT
@@ -109,25 +106,6 @@ export default function HeroNeon({ onOpenTerminal }: HeroNeonProps) {
           </div>
         </div>
       </div>
-
-      {chips.map((chip) => (
-        <div
-          key={chip.text}
-          className={`hero-neon-chip ${chip.position} absolute z-20 hidden items-center gap-2.5 rounded-[14px] border px-4 py-2.5 font-mono text-xs text-white/90 backdrop-blur-xl lg:flex`}
-          style={{
-            borderColor: `${LIME}40`,
-            background: 'rgba(255,255,255,0.06)',
-            animationDelay: chip.delay,
-          }}
-        >
-          <span
-            aria-hidden="true"
-            className="h-2 w-2 shrink-0 rounded-full"
-            style={{ background: LIME, boxShadow: `0 0 8px ${LIME}` }}
-          />
-          {chip.text}
-        </div>
-      ))}
     </section>
   );
 }
