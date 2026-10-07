@@ -50,17 +50,39 @@ function useCountUp(end: number, start: boolean, duration = 1800, delay = 1000) 
   return count;
 }
 
-function StatCard({ stat, started }: { stat: Stat; started: boolean }) {
+function StatCard({
+  stat,
+  started,
+  index,
+}: {
+  stat: Stat;
+  started: boolean;
+  index: number;
+}) {
   const count = useCountUp(stat.value, started);
+  const done = started && count === stat.value;
 
   return (
-    <div className="group relative flex-1 cursor-default overflow-hidden rounded-sm border border-white/10 px-6 py-8 text-center transition-colors duration-300 hover:border-[#BBE351]">
+    <div
+      className={`group relative flex-1 cursor-default overflow-hidden rounded-sm border border-white/10 px-6 py-8 text-center transition-all duration-700 ease-out hover:border-[#BBE351] motion-reduce:transition-none ${
+        started ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+      }`}
+      style={{ transitionDelay: started ? `${index * 150}ms` : '0ms' }}
+    >
       {/* Faded background, fades in on hover */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-[#BBE351]/25 via-[#BBE351]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
+      {/* Light sweep, plays once when the count finishes */}
+      {done && (
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-[#BBE351]/20 to-transparent motion-reduce:hidden"
+          style={{ animation: 'stat-sweep 1.2s ease-out 1 forwards' }}
+        />
+      )}
+
       <div className="relative">
         <h3
-          className="text-3xl font-extrabold tracking-wide text-[#FFFFFF] md:text-4xl"
+          className="text-3xl font-extrabold tracking-wide text-[#BBE351] md:text-4xl"
           style={{ fontFamily: "'Unbounded', sans-serif" }}
         >
           {stat.prefix}
@@ -70,6 +92,12 @@ function StatCard({ stat, started }: { stat: Stat; started: boolean }) {
         <p className="mt-4 text-sm text-[#FFFFFF]">{stat.line1}</p>
         <p className="mt-1 text-sm text-[#FFFFFF]">{stat.line2}</p>
       </div>
+
+      {/* Progress line that fills as the number counts up */}
+      <div
+        className="absolute bottom-0 left-0 h-[2px] bg-[#BBE351]"
+        style={{ width: `${(count / stat.value) * 100}%` }}
+      />
     </div>
   );
 }
@@ -99,10 +127,41 @@ export function StatsSection() {
 
   return (
     <section ref={sectionRef} id="stats" className="bg-[#050607] px-6 py-16">
-      <div className="mx-auto flex max-w-5xl flex-col gap-6 md:flex-row md:gap-10">
-        {STATS.map((stat) => (
-          <StatCard key={stat.line1} stat={stat} started={started} />
-        ))}
+      {/* Keyframes for the light sweep */}
+      <style>{`
+        @keyframes stat-sweep {
+          from { transform: translateX(-120%) skewX(-20deg); }
+          to   { transform: translateX(320%) skewX(-20deg); }
+        }
+      `}</style>
+
+      <div className="mx-auto max-w-5xl">
+        {/* Heading */}
+        <div
+          className={`mb-12 text-center transition-all duration-700 ease-out motion-reduce:transition-none ${
+            started ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+          }`}
+        >
+          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-white/60">
+            The Proof
+          </p>
+          <h2
+            className="text-2xl font-extrabold tracking-wide text-white md:text-4xl"
+            style={{ fontFamily: "'Unbounded', sans-serif" }}
+          >
+            Promises, Measured.
+          </h2>
+          <div
+            className="mx-auto mt-4 h-[2px] bg-[#BBE351] transition-all duration-1000 ease-out motion-reduce:transition-none"
+            style={{ width: started ? '64px' : '0px', transitionDelay: '300ms' }}
+          />
+        </div>
+
+        <div className="flex flex-col gap-6 md:flex-row md:gap-10">
+          {STATS.map((stat, i) => (
+            <StatCard key={stat.line1} stat={stat} started={started} index={i} />
+          ))}
+        </div>
       </div>
     </section>
   );

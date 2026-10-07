@@ -16,6 +16,7 @@ import DotIntro from './components/DotIntro.tsx';
 import RobotCompanion from './components/RobotCompanion.tsx';
 import type { Stage } from './components/RobotCompanion.tsx';
 import { StatsSection } from './components/StatsSection.tsx';
+import { TechStackShowcase } from './components/TechStackShowcase.tsx';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'services-extended'>('home');
@@ -132,7 +133,7 @@ export default function App() {
           <HeroNeon onOpenTerminal={handleOpenTerminal} />
 
           {/* Stats */}
-          <div className=" pt-50">
+          <div className=" pt-30">
             <StatsSection />
           </div>
 
@@ -144,6 +145,8 @@ export default function App() {
 
           {/* 3. About Us // Meet The 4-Person Engineering Team */}
           <SquadSection />
+
+          <TechStackShowcase />
 
           {/* 4. Contact Us // Direct Developer Dispatch & Escrow Hire */}
           <ContactSection selectedService={selectedServiceForContact} />
