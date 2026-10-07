@@ -256,6 +256,222 @@ const FounderFigure: React.FC<{ member: TeamMember }> = ({ member }) => {
 };
 
 /* ------------------------------------------------------------------ */
+/* Why Choose Us (circular layout + expandable pills)                  */
+/* ------------------------------------------------------------------ */
+
+// px push to the right on desktop so the pills follow an arc
+const PILL_OFFSETS = [0, 56, 56, 0];
+
+const WhyChooseUs: React.FC = () => {
+  const reduced = prefersReducedMotion();
+  const isDesktop = useMediaQuery('(min-width: 1024px)');
+  const [ref, inView] = useInView<HTMLDivElement>(0.15);
+  const [active, setActive] = useState<number | null>(0); // null = all closed at start
+
+  const toggle = (i: number) => {
+    sound.playClick();
+    setActive((cur) => (cur === i ? null : i));
+  };
+
+  return (
+    <div
+      ref={ref}
+      className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] gap-12 lg:gap-14 items-center"
+    >
+      <style>{`
+        @keyframes wcuCore {
+          0%, 100% {
+            box-shadow: 0 0 18px rgba(184,227,81,0.12), inset 0 0 18px rgba(184,227,81,0.05);
+            border-color: rgba(184,227,81,0.35);
+          }
+          50% {
+            box-shadow: 0 0 55px rgba(184,227,81,0.5), inset 0 0 35px rgba(184,227,81,0.15);
+            border-color: rgba(184,227,81,0.95);
+          }
+        }
+        @keyframes wcuGlow {
+          0%, 100% { opacity: 0.55; }
+          50% { opacity: 1; }
+        }
+        @keyframes wcuRipple {
+          0% { transform: scale(1); opacity: 0.6; }
+          100% { transform: scale(1.55); opacity: 0; }
+        }
+        @keyframes wcuBlink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.2; }
+        }
+        .wcu-core { animation: wcuCore 2.8s ease-in-out infinite; }
+        .wcu-glow { animation: wcuGlow 2.8s ease-in-out infinite; }
+        .wcu-ripple { animation: wcuRipple 3.2s ease-out infinite; }
+        .wcu-blink { animation: wcuBlink 1.4s ease-in-out infinite; }
+        @media (prefers-reduced-motion: reduce) {
+          .wcu-core, .wcu-glow, .wcu-ripple, .wcu-blink { animation: none; }
+        }
+      `}</style>
+
+      {/* ---------------- LEFT: circle ---------------- */}
+      <div
+        className="relative mx-auto w-full max-w-[290px] sm:max-w-[420px] aspect-square"
+        style={{
+          opacity: inView ? 1 : 0,
+          transform: inView ? 'scale(1)' : 'scale(0.8)',
+          transition: reduced ? 'none' : `opacity 800ms ease, transform 900ms ${EASE}`,
+        }}
+      >
+        <div aria-hidden="true" className="wcu-ripple absolute inset-[14%] rounded-full border border-[#B8E351]/60" />
+        <div
+          aria-hidden="true"
+          className="wcu-ripple absolute inset-[14%] rounded-full border border-[#B8E351]/60"
+          style={{ animationDelay: '1.6s' }}
+        />
+        <div
+          aria-hidden="true"
+          className="absolute -inset-6 rounded-full border border-dashed border-[#B8E351]/25 animate-spin motion-reduce:animate-none"
+          style={{ animationDuration: '60s' }}
+        />
+        <div aria-hidden="true" className="absolute -inset-1 rounded-full border border-[#23430C]" />
+        <div
+          aria-hidden="true"
+          className="wcu-glow absolute inset-3 rounded-full bg-gradient-to-br from-[#14260a] via-[#0b1507] to-[#050607] border border-[#B8E351]/20 shadow-[0_0_60px_rgba(184,227,81,0.12)]"
+        />
+
+        <div className="wcu-core absolute inset-[14%] rounded-full bg-[#070b04] border border-[#B8E351]/40 flex flex-col items-center justify-center text-center px-6 sm:px-10">
+          <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.2em] text-[#B8E351]">
+            CORE ADVANTAGE
+          </span>
+          <h3 className="mt-2 text-xl sm:text-3xl font-extrabold font-display text-white leading-tight tracking-tight">
+            Why You Need To Choose Us<span className="wcu-blink text-[#B8E351]">?</span>
+          </h3>
+          <a
+            href="#contact"
+            onClick={() => sound.playConfirm()}
+            className="mt-4 sm:mt-5 px-4 py-2 rounded-lg bg-[#B8E351] hover:bg-[#d0f671] text-black font-bold text-[10px] font-mono uppercase tracking-wider shadow-[0_0_15px_rgba(184,227,81,0.4)] transition-all active:scale-95"
+          >
+            Let&apos;s work with us
+          </a>
+        </div>
+      </div>
+
+      {/* ---------------- RIGHT: expandable pills ---------------- */}
+      <div className="relative">
+        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-zinc-400 mb-2">
+          <span aria-hidden="true" className="text-[#23430C]">///</span>
+          <span>ZERO MIDDLEMEN · GUARANTEED QUALITY</span>
+        </div>
+        <p className="mb-6 text-xs sm:text-sm text-zinc-400 font-sans max-w-md leading-relaxed">
+          Traditional agencies bill for layers of middle management. We replace overhead with direct,
+          battle-tested engineering output.
+        </p>
+
+        <div className="space-y-4">
+          {WHY_CHOOSE_US.map((item, idx) => {
+            const open = active === idx;
+            const delay = 250 + idx * 120;
+
+            return (
+              <div
+                key={item.title}
+                style={{
+                  marginLeft: isDesktop ? PILL_OFFSETS[idx] : 0,
+                  opacity: inView ? 1 : 0,
+                  transform: inView ? 'translateX(0)' : 'translateX(48px)',
+                  transition: reduced
+                    ? 'none'
+                    : `opacity 700ms ease ${delay}ms, transform 800ms ${EASE} ${delay}ms`,
+                }}
+              >
+                <div
+                  className={`rounded-[28px] border transition-all duration-500 ${
+                    open
+                      ? 'border-[#B8E351] bg-[#0c1707] shadow-[0_0_28px_rgba(184,227,81,0.18)]'
+                      : 'border-[#23430C] bg-[#070b04]/90 hover:border-[#B8E351]/70'
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggle(idx)}
+                    onMouseEnter={() => !open && sound.playHover()}
+                    aria-expanded={open}
+                    aria-controls={`why-panel-${idx}`}
+                    className="w-full flex items-center gap-4 p-2.5 pr-5 text-left rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351]"
+                  >
+                    <span
+                      className={`shrink-0 w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 ${
+                        open
+                          ? 'bg-[#B8E351] border-[#B8E351] scale-105 [&_svg]:text-black'
+                          : 'bg-[#0e1c09] border-[#23430C]'
+                      }`}
+                    >
+                      {item.icon}
+                    </span>
+                    <span
+                      className={`flex-1 font-display font-bold text-sm sm:text-base leading-snug transition-colors duration-300 ${
+                        open ? 'text-[#B8E351]' : 'text-white'
+                      }`}
+                    >
+                      {item.title}
+                    </span>
+                    <ArrowRight
+                      className={`w-4 h-4 shrink-0 transition-transform duration-500 ${
+                        open ? 'rotate-90 text-[#B8E351]' : 'text-zinc-500'
+                      }`}
+                    />
+                  </button>
+
+                  {/* expanding panel */}
+                  <div
+                    id={`why-panel-${idx}`}
+                    role="region"
+                    aria-hidden={!open}
+                    style={{
+                      display: 'grid',
+                      gridTemplateRows: open ? '1fr' : '0fr',
+                      transition: reduced ? 'none' : `grid-template-rows 600ms ${EASE}`,
+                    }}
+                  >
+                    <div className="overflow-hidden">
+                      <div
+                        className="px-5 pb-5 pt-1 sm:pl-[74px]"
+                        style={{
+                          opacity: open ? 1 : 0,
+                          transform: open ? 'translateY(0)' : 'translateY(-8px)',
+                          transition: reduced
+                            ? 'none'
+                            : `opacity 450ms ease ${open ? 200 : 0}ms, transform 500ms ${EASE} ${open ? 200 : 0}ms`,
+                        }}
+                      >
+                        <p className="text-xs sm:text-[13px] text-zinc-300 font-sans leading-relaxed">
+                          {item.description}
+                        </p>
+                        <div className="mt-4 flex items-center gap-3">
+                          <span
+                            aria-hidden="true"
+                            className="h-px bg-gradient-to-r from-[#B8E351] to-transparent"
+                            style={{
+                              width: open ? 48 : 0,
+                              transition: reduced ? 'none' : `width 700ms ${EASE} ${open ? 350 : 0}ms`,
+                            }}
+                          />
+                          <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#030602]/90 border border-[#23430C] text-[10px] font-mono font-bold text-[#B8E351]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#B8E351] animate-pulse" />
+                            {item.stat}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ------------------------------------------------------------------ */
 /* Section                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -759,52 +975,11 @@ export const SquadSection: React.FC = () => {
         </div>
 
         {/* ================================================================= */}
-        {/* 2. WHY YOU NEED TO CHOOSE US  (unchanged)                         */}
+        {/* 2. WHY YOU NEED TO CHOOSE US                                      */}
         {/* ================================================================= */}
         <div className="relative mb-14 text-left">
           <RobotAnchor x="96%" y="6%" scale={0.3} />
-          <div className="border-b border-[#23430C] pb-4 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-1">
-                <span className="text-[#B8E351] font-bold">CORE ADVANTAGE</span>
-                <span aria-hidden="true" className="text-[#23430C]">///</span>
-                <span>ZERO MIDDLEMEN · GUARANTEED QUALITY</span>
-              </div>
-              <h3 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
-                Why You Need To Choose Us
-              </h3>
-            </div>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-md font-sans">
-              Traditional agencies bill for layers of middle management. We replace overhead with direct, battle-tested engineering output.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {WHY_CHOOSE_US.map((item, idx) => (
-              <div
-                key={idx}
-                className="rounded-2xl border border-[#23430C] bg-[#070b04]/90 p-6 flex flex-col justify-between hover:border-[#B8E351]/80 transition-all duration-300 group hover:shadow-[0_0_20px_rgba(184,227,81,0.15)]"
-              >
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-[#0e1c09] border border-[#23430C] flex items-center justify-center mb-4 group-hover:scale-105 transition-transform">
-                    {item.icon}
-                  </div>
-
-                  <h4 className="text-base font-bold font-display text-white mb-2 group-hover:text-[#B8E351] transition-colors">
-                    {item.title}
-                  </h4>
-
-                  <p className="text-xs text-zinc-300 font-sans leading-relaxed mb-4">
-                    {item.description}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-[#23430C]/60 text-[10px] font-mono font-bold text-[#B8E351]">
-                  {item.stat}
-                </div>
-              </div>
-            ))}
-          </div>
+          <WhyChooseUs />
         </div>
 
         {/* ================================================================= */}
