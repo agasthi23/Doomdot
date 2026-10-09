@@ -214,7 +214,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
       {/* ================= PINNED SERVICES RUNWAY ================= */}
       <div
         ref={runwayRef}
-        className="relative min-h-[260vh] -mt-10 sm:-mt-16 lg:-mt-20"
+        className="relative min-h-[260vh] [@media(min-height:900px)]:-mt-16"
       >
         {/* STICKY VIEWPORT CONTAINER */}
         <div className="sticky top-0 h-screen w-full flex items-center justify-center px-4 sm:px-8 lg:px-16 xl:px-24 z-20">
