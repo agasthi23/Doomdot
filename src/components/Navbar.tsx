@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Terminal, Menu, X, ArrowUpRight, Sparkles } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, ArrowUpRight } from 'lucide-react';
 import { sound } from '../utils/audio.ts';
 import { DoomLogo } from './DoomLogo.tsx';
 
 interface NavbarProps {
-  onOpenTerminal: () => void;
+  onOpenTerminal?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const [isMuted, setIsMuted] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -67,7 +67,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
           ))}
         </nav>
 
-        {/* Zone 3: Actions - Audio Toggle + CLI Trigger + Hire CTA */}
+        {/* Zone 3: Actions - Audio Toggle + Location Pill + Hire CTA */}
         <div className="flex items-center gap-3">
           {/* Sound FX Toggle (Arcade Haptic Bleeps) */}
           <button
@@ -84,19 +84,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
             )}
           </button>
 
-          {/* Interactive Terminal Trigger */}
-          <button
-            type="button"
-            onClick={() => {
-              sound.playClick();
-              onOpenTerminal();
-            }}
-            title="Open Interactive Cyber CLI"
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-mono text-zinc-300 hover:text-[#B8E351] bg-[#0c1208] hover:bg-[#14200d] border border-[#23430C] rounded-md transition-colors"
-          >
-            <Terminal className="w-3.5 h-3.5 text-[#B8E351]" />
-            <span>CLI [~]</span>
-          </button>
+          {/* Location Badge: Sri Lanka LK */}
+          <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 bg-[#0e140a]/80 border border-[#23430C] rounded-full text-xs font-mono text-zinc-300 shadow-inner">
+            <span className="w-2 h-2 rounded-full bg-[#B8E351] animate-pulse" />
+            <span>Sri Lanka</span>
+            <span className="text-[10px] text-zinc-500 font-semibold tracking-wider">LK</span>
+          </div>
 
           {/* Primary Action Button: Glowing Cyber Lime Button */}
           <a
@@ -140,19 +133,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenTerminal }) => {
                 {link.label}
               </a>
             ))}
-            <div className="pt-2 flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  setMobileMenuOpen(false);
-                  onOpenTerminal();
-                }}
-                className="flex items-center gap-2 text-xs font-mono text-zinc-300 py-1"
-              >
-                <Terminal className="w-4 h-4 text-[#B8E351]" />
-                <span>Launch DoomDot Terminal</span>
-              </button>
+            <div className="pt-2 flex items-center gap-2 text-xs font-mono text-zinc-400">
+              <span className="w-2 h-2 rounded-full bg-[#B8E351]" />
+              <span>Based in Sri Lanka (LK)</span>
             </div>
           </nav>
         </div>
