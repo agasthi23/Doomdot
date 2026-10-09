@@ -2,8 +2,9 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import { AdditiveBlending, Color } from 'three';
 import type { Group, ShaderMaterial } from 'three';
+import { COLORS } from '../theme';
 
-const LIME = '#B8E351';
+const LIME = COLORS.primary;
 const COUNT = 4000;
 const RADIUS = 2.1;
 const SHELL_OPACITY = 0.55;
