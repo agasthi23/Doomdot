@@ -5,6 +5,9 @@ import { EffectComposer, Bloom } from '@react-three/postprocessing';
 import * as THREE from 'three';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { COLORS } from '../theme';
+
+const LIME = COLORS.primary;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -150,27 +153,27 @@ const IcosahedronScene: React.FC<{
             ior={1.55}
             thickness={1.6}
             specularIntensity={1.5}
-            specularColor="#B6FF1A"
+            specularColor={LIME}
             transparent={true}
             opacity={0.88}
             depthWrite={true}
           />
         </mesh>
 
-        {/* Outer Wireframe Mesh with Emissive Lime (#B6FF1A) */}
+        {/* Outer Wireframe Mesh with Emissive Lime */}
         <mesh geometry={outerIcoGeo}>
           <meshBasicMaterial
-            color="#B6FF1A"
+            color={LIME}
             wireframe={true}
             transparent={true}
             opacity={0.85}
           />
         </mesh>
 
-        {/* Emissive Lime (#B6FF1A) Edges Geometry for sharp laser definition */}
+        {/* Emissive Lime Edges Geometry for sharp laser definition */}
         <lineSegments geometry={outerEdgesGeo}>
           <lineBasicMaterial
-            color="#B6FF1A"
+            color={LIME}
             transparent={true}
             opacity={0.95}
             linewidth={1.8}
@@ -181,7 +184,7 @@ const IcosahedronScene: React.FC<{
         <points geometry={outerIcoGeo}>
           <pointsMaterial
             size={0.065}
-            color="#B6FF1A"
+            color={LIME}
             transparent={true}
             opacity={0.95}
             blending={THREE.AdditiveBlending}
@@ -191,7 +194,7 @@ const IcosahedronScene: React.FC<{
         {/* Inner Glowing Core within the Dark Glass */}
         <mesh ref={innerCoreGlowRef} geometry={innerOrbGeo}>
           <meshBasicMaterial
-            color="#B6FF1A"
+            color={LIME}
             wireframe={true}
             transparent={true}
             opacity={0.8}
@@ -199,7 +202,7 @@ const IcosahedronScene: React.FC<{
         </mesh>
 
         {/* High-intensity Point Lights for Bloom activation */}
-        <pointLight color="#B6FF1A" intensity={4.8} distance={3.8} />
+        <pointLight color={LIME} intensity={4.8} distance={3.8} />
         <pointLight color="#00f3ff" intensity={2.0} distance={2.5} />
       </group>
 
@@ -212,16 +215,16 @@ const IcosahedronScene: React.FC<{
         {/* Wireframe Torus Ring */}
         <mesh>
           <torusGeometry args={[ring1Radius, 0.012, 16, 90]} />
-          <meshBasicMaterial color="#B6FF1A" transparent={true} opacity={0.45} />
+          <meshBasicMaterial color={LIME} transparent={true} opacity={0.45} />
         </mesh>
         
         {/* Orbiting Glowing Node 1 */}
         <group ref={node1Ref}>
           <mesh>
             <sphereGeometry args={[0.075, 16, 16]} />
-            <meshBasicMaterial color="#B6FF1A" />
+            <meshBasicMaterial color={LIME} />
           </mesh>
-          <pointLight color="#B6FF1A" intensity={3.5} distance={1.2} />
+          <pointLight color={LIME} intensity={3.5} distance={1.2} />
         </group>
       </group>
 
@@ -229,16 +232,16 @@ const IcosahedronScene: React.FC<{
       <group rotation={[-Math.PI / 3.5, 0.45, 0]}>
         <mesh>
           <torusGeometry args={[ring2Radius, 0.012, 16, 90]} />
-          <meshBasicMaterial color="#B6FF1A" transparent={true} opacity={0.4} />
+          <meshBasicMaterial color={LIME} transparent={true} opacity={0.4} />
         </mesh>
 
         {/* Orbiting Glowing Node 2 */}
         <group ref={node2Ref}>
           <mesh>
             <sphereGeometry args={[0.075, 16, 16]} />
-            <meshBasicMaterial color="#B6FF1A" />
+            <meshBasicMaterial color={LIME} />
           </mesh>
-          <pointLight color="#B6FF1A" intensity={3.5} distance={1.2} />
+          <pointLight color={LIME} intensity={3.5} distance={1.2} />
         </group>
       </group>
 
@@ -246,16 +249,16 @@ const IcosahedronScene: React.FC<{
       <group rotation={[Math.PI / 5, -0.4, 0.3]}>
         <mesh>
           <torusGeometry args={[ring3Radius, 0.012, 16, 90]} />
-          <meshBasicMaterial color="#B6FF1A" transparent={true} opacity={0.35} />
+          <meshBasicMaterial color={LIME} transparent={true} opacity={0.35} />
         </mesh>
 
         {/* Orbiting Glowing Node 3 */}
         <group ref={node3Ref}>
           <mesh>
             <sphereGeometry args={[0.075, 16, 16]} />
-            <meshBasicMaterial color="#B6FF1A" />
+            <meshBasicMaterial color={LIME} />
           </mesh>
-          <pointLight color="#B6FF1A" intensity={3.5} distance={1.2} />
+          <pointLight color={LIME} intensity={3.5} distance={1.2} />
         </group>
       </group>
 
@@ -263,16 +266,16 @@ const IcosahedronScene: React.FC<{
       <group rotation={[-Math.PI / 6, -0.3, -0.4]}>
         <mesh>
           <torusGeometry args={[ring4Radius, 0.012, 16, 90]} />
-          <meshBasicMaterial color="#B6FF1A" transparent={true} opacity={0.3} />
+          <meshBasicMaterial color={LIME} transparent={true} opacity={0.3} />
         </mesh>
 
         {/* Orbiting Glowing Node 4 */}
         <group ref={node4Ref}>
           <mesh>
             <sphereGeometry args={[0.075, 16, 16]} />
-            <meshBasicMaterial color="#B6FF1A" />
+            <meshBasicMaterial color={LIME} />
           </mesh>
-          <pointLight color="#B6FF1A" intensity={3.5} distance={1.2} />
+          <pointLight color={LIME} intensity={3.5} distance={1.2} />
         </group>
       </group>
     </group>
@@ -286,7 +289,7 @@ const AmbientParticleField: React.FC<{ count?: number }> = ({ count = 160 }) => 
   const [positions, colors] = useMemo(() => {
     const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
-    const lime = new THREE.Color('#B6FF1A');
+    const lime = new THREE.Color(LIME);
     const darkLime = new THREE.Color('#23430C');
 
     for (let i = 0; i < count; i++) {
@@ -375,7 +378,7 @@ export const QuantumCoreCanvas: React.FC<QuantumCoreCanvasProps> = ({
         {/* Technical Lighting */}
         <ambientLight intensity={0.5} />
         <directionalLight position={[4, 5, 4]} intensity={2.4} color="#ffffff" />
-        <directionalLight position={[-4, 3, -3]} intensity={3.5} color="#B6FF1A" />
+        <directionalLight position={[-4, 3, -3]} intensity={3.5} color={LIME} />
         <directionalLight position={[0, -4, 2]} intensity={1.8} color="#00f3ff" />
 
         <Float speed={1.6} rotationIntensity={0.15} floatIntensity={0.3}>

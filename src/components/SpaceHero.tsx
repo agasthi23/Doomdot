@@ -9,8 +9,9 @@ import {
   Vector3,
 } from 'three';
 import type { Group, Mesh } from 'three';
+import { COLORS } from '../theme';
 
-const LIME = '#B6FF1A';
+const LIME = COLORS.primary;
 const GLOW = '#6fb7ff';
 const WORD = 'DOOMDOT';
 

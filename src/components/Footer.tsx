@@ -45,7 +45,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
               className="text-zinc-300 hover:text-[#B8E351] transition-colors flex items-center gap-1.5 cursor-pointer"
             >
               <Mail className="w-3.5 h-3.5 text-[#B8E351]" />
-              <span>{copied ? 'Copied squad@doomdot.dev' : 'squad@doomdot.dev'}</span>
+              <span>{copied ? 'Copied doomdotsquad@gmail.com' : 'doomdotsquad@gmail.com'}</span>
             </button>
             <span aria-hidden="true" className="text-[#23430C]">///</span>
             <a
@@ -66,7 +66,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
               Fiverr Pro
             </a>
             <span aria-hidden="true" className="text-[#23430C]">///</span>
-            <a
+            {/* <a
               href="https://github.com"
               target="_blank"
               rel="noreferrer"
@@ -74,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
             >
               <Github className="w-3.5 h-3.5" />
               <span>GitHub</span>
-            </a>
+            </a> */}
           </div>
 
           {/* Back to top */}
@@ -104,7 +104,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
             <a href="#contact" onClick={() => sound.playHover()} className="hover:text-[#B8E351] transition-colors">
               Contact Us
             </a>
-            <button
+            {/* <button
               type="button"
               onClick={() => {
                 sound.playClick();
@@ -114,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
             >
               <Terminal className="w-3.5 h-3.5" />
               <span>CLI [~]</span>
-            </button>
+            </button> */}
           </div>
 
           <div className="text-[11px] text-zinc-500 font-mono">
@@ -132,8 +132,8 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
               <span className="w-2 h-2 rounded-full bg-[#B8E351] animate-pulse" />
               <span>Obsidian &amp; Cyber Lime Theme</span>
             </span>
-            <span aria-hidden="true" className="text-[#23430C]">///</span>
-            <span>Upwork Top-Rated &amp; Fiverr Pro Verified</span>
+            {/* <span aria-hidden="true" className="text-[#23430C]">///</span>
+            <span>Upwork Top-Rated &amp; Fiverr Pro Verified</span> */}
           </div>
         </div>
       </div>

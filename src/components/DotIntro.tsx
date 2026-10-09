@@ -1,7 +1,8 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { COLORS } from '../theme';
 
-const LIME = '#B8E351';
+const LIME = COLORS.primary;
 const LETTERS = 'DOOMDOT'.split('');
 
 type Props = {
