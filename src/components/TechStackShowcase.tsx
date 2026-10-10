@@ -12,139 +12,245 @@ import React, { useEffect, useRef, useState } from 'react';
 type Tech = {
   id: string;
   name: string;
-  year: number;
-  kind: string;
+  kind: string; // first chip on the card
   tagline: string;
   description: string;
-  tags: string[];
+  tags: string[]; // tags[0] is the second chip on the card
   image: string; // file in public/tech/
   url: string; // official site
 };
 
-/* ================================================================== */
-/*  IMAGES — put the language logo files in: public/tech/             */
-/* ================================================================== */
-
 const TECHS: Tech[] = [
   {
-    id: 'javascript',
-    name: 'JavaScript',
-    year: 1995,
-    kind: 'Scripting',
-    tagline: 'The language of the web',
+    id: 'nextjs',
+    name: 'Next.js',
+    kind: 'Framework',
+    tagline: 'The React framework for production',
     description:
-      'JavaScript runs in every browser and, with Node.js, on the server too. One language for the whole product means faster teams and simpler hiring.',
-    tags: ['Frontend', 'Node.js', 'Full-Stack'],
-    image: '/tech/javascript.svg',
-    url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+      'Next.js gives us fast server-rendered React apps with the App Router and Server Components. Pages load quickly and rank well in search.',
+    tags: ['Frontend', 'Full-Stack'],
+    image: '/tech/nextjs.svg',
+    url: 'https://nextjs.org',
+  },
+  {
+    id: 'react',
+    name: 'React',
+    kind: 'Library',
+    tagline: 'Build UIs from simple components',
+    description:
+      'React lets us build interactive interfaces from small reusable parts. It is the base of our web apps and shares ideas with React Native for mobile.',
+    tags: ['Frontend', 'Web Apps'],
+    image: '/tech/react.svg',
+    url: 'https://react.dev',
   },
   {
     id: 'typescript',
     name: 'TypeScript',
-    year: 2012,
-    kind: 'Typed JS',
+    kind: 'Language',
     tagline: 'JavaScript with safety nets',
     description:
-      'TypeScript adds static types on top of JavaScript. It catches bugs while we write code and keeps big React and Node projects easy to grow and maintain.',
-    tags: ['React', 'Node.js', 'Large Apps'],
+      'TypeScript adds types on top of JavaScript. It catches bugs while we write code and keeps large projects easy to grow and maintain.',
+    tags: ['Type Safety', 'Frontend'],
     image: '/tech/typescript.svg',
     url: 'https://www.typescriptlang.org',
   },
   {
+    id: 'tailwindcss',
+    name: 'Tailwind CSS',
+    kind: 'Styling',
+    tagline: 'Utility-first styling',
+    description:
+      'Tailwind CSS lets us style fast without heavy component libraries. We turn Figma design tokens into clean theme settings.',
+    tags: ['Design Tokens'],
+    image: '/tech/tailwindcss.svg',
+    url: 'https://tailwindcss.com',
+  },
+  {
+    id: 'framer-motion',
+    name: 'Framer Motion',
+    kind: 'Animation',
+    tagline: 'Smooth animation for React',
+    description:
+      'Framer Motion powers our spring-based micro-interactions and page transitions, so interfaces feel natural and responsive.',
+    tags: ['Frontend'],
+    image: '/tech/framer-motion.svg',
+    url: 'https://www.framer.com/motion/',
+  },
+  {
+    id: 'vite',
+    name: 'Vite',
+    kind: 'Build Tool',
+    tagline: 'Instant dev server, fast builds',
+    description:
+      'Vite starts in milliseconds and builds optimized bundles. We use it for quick front-end projects and tools.',
+    tags: ['Frontend'],
+    image: '/tech/vite.svg',
+    url: 'https://vite.dev',
+  },
+  {
+    id: 'nodejs',
+    name: 'Node.js',
+    kind: 'Runtime',
+    tagline: 'JavaScript on the server',
+    description:
+      'Node.js lets us run JavaScript on the back end, so one language can power the whole product. Great for fast APIs and real-time features.',
+    tags: ['Backend', 'APIs'],
+    image: '/tech/nodejs.svg',
+    url: 'https://nodejs.org',
+  },
+  {
     id: 'python',
     name: 'Python',
-    year: 1991,
-    kind: 'General',
+    kind: 'Language',
     tagline: 'Readable, powerful, versatile',
     description:
-      'Python is simple to read and quick to write. We use it for APIs, automation, data processing and AI / machine learning features.',
-    tags: ['Backend', 'AI / ML', 'Automation'],
+      'Python is simple to read and quick to write. We use it for back-end services, data pipelines and AI / machine learning features.',
+    tags: ['AI / ML', 'Backend'],
     image: '/tech/python.svg',
     url: 'https://www.python.org',
   },
   {
-    id: 'java',
-    name: 'Java',
-    year: 1995,
-    kind: 'Compiled',
-    tagline: 'Write once, run anywhere',
+    id: 'postgresql',
+    name: 'PostgreSQL',
+    kind: 'Database',
+    tagline: 'The reliable relational database',
     description:
-      'Java is a mature, fast and very reliable language that runs on the JVM. It is a strong choice for large enterprise back ends and long-living systems.',
-    tags: ['Enterprise', 'Backend', 'Spring'],
-    image: '/tech/java.svg',
-    url: 'https://dev.java',
+      'PostgreSQL stores your data safely with strong consistency. We design clean schemas, add indexes and run automated migrations.',
+    tags: ['SQL'],
+    image: '/tech/postgresql.svg',
+    url: 'https://www.postgresql.org',
   },
   {
-    id: 'csharp',
-    name: 'C#',
-    year: 2000,
-    kind: 'Compiled',
-    tagline: 'Modern language for .NET',
+    id: 'express',
+    name: 'Express',
+    kind: 'Framework',
+    tagline: 'Minimal web framework for Node.js',
     description:
-      "C# is Microsoft's modern, type-safe language for .NET. We use it for secure back-end services, desktop apps and games built with Unity.",
-    tags: ['.NET', 'Desktop', 'Games'],
-    image: '/tech/csharp.svg',
-    url: 'https://learn.microsoft.com/en-us/dotnet/csharp/',
+      'Express is a small, flexible framework for building REST APIs. We add validation, rate-limiting and error handling on top.',
+    tags: ['Backend', 'REST APIs'],
+    image: '/tech/express.svg',
+    url: 'https://expressjs.com',
   },
   {
-    id: 'go',
-    name: 'Go',
-    year: 2009,
-    kind: 'Compiled',
-    tagline: 'Simple, fast, built for the cloud',
+    id: 'docker',
+    name: 'Docker',
+    kind: 'DevOps',
+    tagline: 'Same setup everywhere',
     description:
-      'Created at Google, Go compiles fast and handles thousands of requests at once with ease. It is ideal for cloud services, APIs and DevOps tools.',
-    tags: ['Cloud', 'Microservices', 'APIs'],
-    image: '/tech/go.svg',
-    url: 'https://go.dev',
+      'Docker packages your app and its settings into containers, so it runs the same on a laptop, a server or the cloud.',
+    tags: ['Deployment'],
+    image: '/tech/docker.svg',
+    url: 'https://www.docker.com',
   },
   {
-    id: 'rust',
-    name: 'Rust',
-    year: 2015,
-    kind: 'Systems',
-    tagline: 'Fast and memory-safe',
+    id: 'redis',
+    name: 'Redis',
+    kind: 'Cache',
+    tagline: 'In-memory speed for your data',
     description:
-      'Rust gives C++-level speed with strong memory safety and no garbage collector. We pick it when performance and safety both matter, including WebAssembly.',
-    tags: ['Memory-Safe', 'WebAssembly', 'Performance'],
-    image: '/tech/rust.svg',
-    url: 'https://www.rust-lang.org',
+      'Redis is a very fast in-memory store. We use it for caching, sessions and queues to keep apps quick under heavy load.',
+    tags: ['Database'],
+    image: '/tech/redis.svg',
+    url: 'https://redis.io',
   },
   {
-    id: 'php',
-    name: 'PHP',
-    year: 1995,
-    kind: 'Scripting',
-    tagline: 'Server-side web workhorse',
+    id: 'stripe',
+    name: 'Stripe',
+    kind: 'Payments',
+    tagline: 'Payments made simple',
     description:
-      'PHP powers a huge part of the internet, including WordPress. With modern frameworks like Laravel it is a quick way to ship solid web back ends.',
-    tags: ['Laravel', 'WordPress', 'Backend'],
-    image: '/tech/php.svg',
-    url: 'https://www.php.net',
+      'Stripe handles online payments and billing. We connect checkout, subscriptions and webhooks safely into your product.',
+    tags: ['Billing'],
+    image: '/tech/stripe.svg',
+    url: 'https://stripe.com',
   },
   {
-    id: 'kotlin',
-    name: 'Kotlin',
-    year: 2011,
-    kind: 'Compiled',
-    tagline: 'Concise and safe',
+    id: 'git',
+    name: 'Git',
+    kind: 'Version Control',
+    tagline: 'Version control for every change',
     description:
-      'Kotlin, from JetBrains, is short, safe and fully compatible with Java. It is the preferred language for Android apps and works well on the server too.',
-    tags: ['Android', 'Mobile', 'Backend'],
-    image: '/tech/kotlin.svg',
-    url: 'https://kotlinlang.org',
+      'Git tracks every change in the code. We hand over a clean, modular codebase in a private GitHub repository.',
+    tags: ['GitHub'],
+    image: '/tech/git.svg',
+    url: 'https://git-scm.com',
   },
   {
-    id: 'cpp',
-    name: 'C++',
-    year: 1985,
-    kind: 'Systems',
-    tagline: 'Raw performance and control',
+    id: 'react-native',
+    name: 'React Native',
+    kind: 'Mobile',
+    tagline: 'Real mobile apps with React',
     description:
-      'C++ gives direct control over hardware and memory. It is used for game engines, embedded software and any system where every millisecond counts.',
-    tags: ['Games', 'Embedded', 'Performance'],
-    image: '/tech/cpp.svg',
-    url: 'https://isocpp.org',
+      'React Native builds iOS and Android apps from one codebase, with native gestures, smooth frame rates and device features.',
+    tags: ['Cross-Platform'],
+    image: '/tech/react-native.svg',
+    url: 'https://reactnative.dev',
+  },
+  {
+    id: 'expo',
+    name: 'Expo',
+    kind: 'Mobile',
+    tagline: 'Faster React Native development',
+    description:
+      'Expo makes mobile development easier with ready tools for testing, building and shipping apps to the app stores.',
+    tags: ['Tooling'],
+    image: '/tech/expo.svg',
+    url: 'https://expo.dev',
+  },
+  {
+    id: 'pytorch',
+    name: 'PyTorch',
+    kind: 'ML',
+    tagline: 'Deep learning framework',
+    description:
+      'PyTorch is a flexible framework for building and training machine learning models and custom data processing pipelines.',
+    tags: ['Python'],
+    image: '/tech/pytorch.svg',
+    url: 'https://pytorch.org',
+  },
+  {
+    id: 'openai',
+    name: 'OpenAI API',
+    kind: 'AI / LLM',
+    tagline: 'LLMs inside your product',
+    description:
+      'We connect large language models to your software for chat, summaries, search and automation, with fallback handling and usage monitoring.',
+    tags: ['API'],
+    image: '/tech/openai.svg',
+    url: 'https://platform.openai.com/docs',
+  },
+  {
+    id: 'langchain',
+    name: 'LangChain',
+    kind: 'AI / LLM',
+    tagline: 'Framework for LLM workflows',
+    description:
+      'LangChain helps us build agent-style workflows and prompt pipelines that connect LLMs to your data and tools.',
+    tags: ['Agents'],
+    image: '/tech/langchain.svg',
+    url: 'https://www.langchain.com',
+  },
+  {
+    id: 'fastapi',
+    name: 'FastAPI',
+    kind: 'Framework',
+    tagline: 'Fast Python APIs',
+    description:
+      'FastAPI is a high-performance Python framework. We use it for AI microservices and for background tasks that take a long time.',
+    tags: ['Python'],
+    image: '/tech/fastapi.svg',
+    url: 'https://fastapi.tiangolo.com',
+  },
+  {
+    id: 'vector-db',
+    name: 'Vector DBs',
+    kind: 'AI / ML',
+    tagline: 'Semantic search for AI',
+    description:
+      'Vector databases like Pinecone and Chroma store meaning, not just words. We use them for semantic search and smarter AI answers.',
+    tags: ['Search'],
+    image: '/tech/vector-db.svg',
+    url: 'https://www.pinecone.io',
   },
 ];
 
@@ -161,8 +267,16 @@ const TEXT = '#FFFFFF';
 /*  Settings                                                           */
 /* ------------------------------------------------------------------ */
 
-const AUTO_SLIDE_MS = 5000;
+const AUTO_SLIDE_MS = 4000;
 const ASPECT = 1.12;
+
+// Same space above and below the section content.
+// Change this one number to change both.
+const SECTION_PAD = 96;
+
+// Background shapes
+const SHAPE_OPACITY = 1; // overall strength of the paper-cut shapes, 0 to 1
+const GRAIN_OPACITY = 0.05; // 0 to 1, set to 0 to remove the grain
 
 /* ------------------------------------------------------------------ */
 /*  Layout helpers                                                     */
@@ -170,6 +284,8 @@ const ASPECT = 1.12;
 
 type Phase = 'stack' | 'row' | 'carousel';
 
+// Index 0 = center card, 1 = next to center, and so on.
+// Left and right sides use the same values, so the slider is balanced.
 const SCALE = [1.28, 0.92, 0.8, 0.7];
 const SPACE = [0, 1.02, 1.82, 2.45];
 const OPACITY = [1, 0.8, 0.5, 0.22];
@@ -184,6 +300,8 @@ const hostOf = (url: string) => {
     return url;
   }
 };
+
+const pad = (v: number) => String(v).padStart(2, '0');
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
@@ -254,11 +372,109 @@ const Chevron = ({ dir }: { dir: 'left' | 'right' }) => (
     strokeLinejoin="round"
     aria-hidden="true"
   >
-    <path
-      d={dir === 'left' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'}
-    />
+    <path d={dir === 'left' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} />
   </svg>
 );
+
+/* ------------------------------------------------------------------ */
+/*  Status pill with pulsing "active" dot                              */
+/* ------------------------------------------------------------------ */
+
+function StatusPill({ label }: { label: string }) {
+  return (
+    <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-[#BBE351]/30 bg-[#BBE351]/5 px-5 py-2">
+      <span className="relative flex h-2.5 w-2.5 shrink-0">
+        {/* Pulsing ring */}
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#BBE351] opacity-75 motion-reduce:animate-none" />
+        {/* Solid dot */}
+        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#BBE351] shadow-[0_0_8px_#BBE351]" />
+      </span>
+      <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#BBE351] sm:text-xs">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Section background (decorative only, matte)                        */
+/*  Flat BG (#050607) with layered "paper-cut" organic shapes in       */
+/*  SECONDARY (#234200). Solid fills only: no lines, grid, fade or     */
+/*  glow. The shapes sit in two opposite corners and a light grain     */
+/*  gives a paper-like finish.                                         */
+/* ------------------------------------------------------------------ */
+
+const GRAIN = `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.5 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")`;
+
+// One corner made of three stacked flat layers (large, medium, small).
+function CornerShapes() {
+  return (
+    <>
+      <path
+        d="M0 0 H560 C520 95 455 160 360 200 C265 240 150 232 78 305 C34 350 10 400 0 450 Z"
+        fill={SECONDARY}
+        fillOpacity="0.28"
+      />
+      <path
+        d="M0 0 H370 C338 75 285 118 222 140 C150 165 78 182 0 262 Z"
+        fill={SECONDARY}
+        fillOpacity="0.5"
+      />
+      <path
+        d="M0 0 H175 C152 45 108 78 0 112 Z"
+        fill={SECONDARY}
+        fillOpacity="0.85"
+      />
+    </>
+  );
+}
+
+function SectionBackground() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+      style={{ background: BG }}
+    >
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 1200 800"
+        preserveAspectRatio="xMidYMid slice"
+        style={{ opacity: SHAPE_OPACITY }}
+      >
+        {/* Top-left corner */}
+        <CornerShapes />
+
+        {/* Bottom-right corner (same shapes turned upside down) */}
+        <g transform="rotate(180 600 400)">
+          <CornerShapes />
+        </g>
+
+        {/* A few small solid dots, scattered */}
+        <g fill={SECONDARY} fillOpacity="0.7">
+          <circle cx="690" cy="86" r="5" />
+          <circle cx="748" cy="132" r="3" />
+          <circle cx="1010" cy="214" r="6" />
+          <circle cx="1088" cy="150" r="3" />
+          <circle cx="510" cy="714" r="5" />
+          <circle cx="452" cy="668" r="3" />
+          <circle cx="190" cy="586" r="6" />
+          <circle cx="112" cy="650" r="3" />
+        </g>
+      </svg>
+
+      {/* Light grain for a matte, paper-like finish */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: GRAIN,
+          backgroundSize: '160px 160px',
+          opacity: GRAIN_OPACITY,
+        }}
+      />
+    </div>
+  );
+}
 
 /* ================================================================== */
 /*  Component                                                          */
@@ -270,9 +486,7 @@ export function TechStackShowcase() {
   const reduced = useRef(prefersReducedMotion()).current;
 
   const [active, setActive] = useState(0);
-  const [phase, setPhase] = useState<Phase>(
-    reduced ? 'carousel' : 'stack',
-  );
+  const [phase, setPhase] = useState<Phase>(reduced ? 'carousel' : 'stack');
   const [started, setStarted] = useState(reduced);
   const [inView, setInView] = useState(false);
   const [kbFocus, setKbFocus] = useState(false);
@@ -283,40 +497,26 @@ export function TechStackShowcase() {
   const stageRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef<number | null>(null);
 
-  /* ---------------------------------------------------------------- */
-  /* Start intro when section enters viewport                          */
-  /* ---------------------------------------------------------------- */
-
+  /* Start intro when section enters viewport */
   useEffect(() => {
     const el = sectionRef.current;
-
     if (!el) return;
 
     const io = new IntersectionObserver(
       ([entry]) => {
         setInView(entry.isIntersecting);
-
-        if (entry.isIntersecting) {
-          setStarted(true);
-        }
+        if (entry.isIntersecting) setStarted(true);
       },
-      {
-        threshold: 0.35,
-      },
+      { threshold: 0.35 },
     );
 
     io.observe(el);
-
     return () => io.disconnect();
   }, []);
 
-  /* ---------------------------------------------------------------- */
-  /* Track carousel width                                             */
-  /* ---------------------------------------------------------------- */
-
+  /* Track carousel width */
   useEffect(() => {
     const el = stageRef.current;
-
     if (!el) return;
 
     setCw(el.clientWidth);
@@ -326,38 +526,25 @@ export function TechStackShowcase() {
     });
 
     ro.observe(el);
-
     return () => ro.disconnect();
   }, []);
 
-  /* ---------------------------------------------------------------- */
-  /* Intro timeline: stack -> row -> carousel                         */
-  /* ---------------------------------------------------------------- */
-
+  /* Intro timeline: stack -> row -> carousel */
   useEffect(() => {
     if (!started) return;
 
     if (phase === 'stack') {
-      const t = setTimeout(() => {
-        setPhase('row');
-      }, 700);
-
+      const t = setTimeout(() => setPhase('row'), 700);
       return () => clearTimeout(t);
     }
 
     if (phase === 'row') {
-      const t = setTimeout(() => {
-        setPhase('carousel');
-      }, 2000);
-
+      const t = setTimeout(() => setPhase('carousel'), 2000);
       return () => clearTimeout(t);
     }
   }, [phase, started]);
 
-  /* ---------------------------------------------------------------- */
-  /* Release mouse/finger hold                                        */
-  /* ---------------------------------------------------------------- */
-
+  /* Release mouse/finger hold */
   useEffect(() => {
     const release = () => setHolding(false);
 
@@ -372,18 +559,9 @@ export function TechStackShowcase() {
     };
   }, []);
 
-  /* ---------------------------------------------------------------- */
-  /* Auto slide                                                       */
-  /* ---------------------------------------------------------------- */
-
+  /* Auto slide */
   useEffect(() => {
-    if (
-      phase !== 'carousel' ||
-      holding ||
-      kbFocus ||
-      !inView ||
-      reduced
-    ) {
+    if (phase !== 'carousel' || holding || kbFocus || !inView || reduced) {
       return;
     }
 
@@ -392,20 +570,9 @@ export function TechStackShowcase() {
     }, AUTO_SLIDE_MS);
 
     return () => clearTimeout(t);
-  }, [
-    phase,
-    holding,
-    kbFocus,
-    inView,
-    reduced,
-    n,
-    active,
-  ]);
+  }, [phase, holding, kbFocus, inView, reduced, n, active]);
 
-  /* ---------------------------------------------------------------- */
-  /* Navigation                                                       */
-  /* ---------------------------------------------------------------- */
-
+  /* Navigation */
   const step = (dir: 1 | -1) => {
     setActive((a) => (a + dir + n) % n);
   };
@@ -420,61 +587,29 @@ export function TechStackShowcase() {
     }
   };
 
-  /* ---------------------------------------------------------------- */
-  /* Geometry                                                         */
-  /* ---------------------------------------------------------------- */
-
-  /*
-   * Mobile:
-   * Slightly smaller cards give the carousel more breathing room.
-   *
-   * Desktop:
-   * Original 20% sizing is preserved.
-   */
+  /* Geometry */
   const W = Math.round(
-    Math.min(
-      240,
-      Math.max(
-        135,
-        cw < 640 ? cw * 0.19 : cw * 0.2,
-      ),
-    ),
+    Math.min(240, Math.max(135, cw < 640 ? cw * 0.19 : cw * 0.2)),
   );
 
   const H = Math.round(W * ASPECT);
 
-  /*
-   * Every card is built at the largest size and scaled down using
-   * transform. This keeps text sharp and prevents layout reflow.
-   */
+  // Every card is built at the largest size and scaled down with
+  // transform. This keeps text sharp and prevents layout reflow.
   const CARD_W = even(W * SCALE[0]);
   const CARD_H = even(CARD_W * ASPECT);
 
-  const rowGap = Math.min(
-    W * 0.66,
-    (cw * 0.94) / n,
-  );
-
+  const rowGap = Math.min(W * 0.66, (cw * 0.94) / n);
   const rowScale = (rowGap * 0.86) / W;
 
-  /* ---------------------------------------------------------------- */
-  /* Determine relative position                                      */
-  /* ---------------------------------------------------------------- */
-
+  /* Relative position of a card to the active one */
   const offsetOf = (i: number) => {
     let d = (((i - active) % n) + n) % n;
-
-    if (d > n / 2) {
-      d -= n;
-    }
-
+    if (d > n / 2) d -= n;
     return d;
   };
 
-  /* ---------------------------------------------------------------- */
-  /* Card layout                                                       */
-  /* ---------------------------------------------------------------- */
-
+  /* Card layout */
   const layoutOf = (i: number) => {
     const off = offsetOf(i);
     const a = Math.abs(off);
@@ -514,66 +649,42 @@ export function TechStackShowcase() {
       bright = 0.4;
     }
 
-    return {
-      a,
-      tx,
-      sc,
-      op,
-      z,
-      bright,
-      delay,
-    };
+    return { a, tx, sc, op, z, bright, delay };
   };
 
-  /* ---------------------------------------------------------------- */
-  /* Card styles                                                       */
-  /* ---------------------------------------------------------------- */
-
-  const cardStyle = (
-    i: number,
-  ): React.CSSProperties => {
-    const {
-      a,
-      tx,
-      sc,
-      op,
-      z,
-      delay,
-    } = layoutOf(i);
+  /* Card styles */
+  const cardStyle = (i: number): React.CSSProperties => {
+    const { a, tx, sc, op, z, delay } = layoutOf(i);
 
     return {
       width: CARD_W,
       height: CARD_H,
 
-      /*
-       * All text inside the card scales together.
-       */
+      // All text inside the card scales together.
       fontSize: CARD_W,
 
       marginLeft: -CARD_W / 2,
       marginTop: -CARD_H / 2,
 
-      transform: `translateX(${Math.round(
-        tx,
-      )}px) scale(${sc / SCALE[0]})`,
+      transform: `translateX(${Math.round(tx)}px) scale(${sc / SCALE[0]})`,
 
       opacity: op,
       zIndex: z,
 
       transitionDelay: `${delay}ms`,
-      transitionDuration:
-        phase === 'carousel'
-          ? '800ms'
-          : '1100ms',
+      transitionDuration: phase === 'carousel' ? '800ms' : '1100ms',
 
-      pointerEvents:
-        phase === 'carousel' && op > 0
-          ? 'auto'
-          : 'none',
+      pointerEvents: phase === 'carousel' && op > 0 ? 'auto' : 'none',
 
+      // Active card: bright ring + green glow. Others: soft dark shadow.
       boxShadow:
         phase === 'carousel' && a === 0
-          ? `0 30px 80px -25px ${PRIMARY}66`
+          ? `
+              0 0 0 1px ${PRIMARY}80,
+              0 0 34px 2px ${PRIMARY}59,
+              0 30px 80px -20px ${PRIMARY}80,
+              inset 0 1px 0 ${PRIMARY}66
+            `
           : `0 10px 30px -15px ${BG}`,
     };
   };
@@ -588,10 +699,13 @@ export function TechStackShowcase() {
     <section
       id="tech"
       ref={sectionRef}
-      className="relative overflow-hidden py-24"
+      className="relative isolate overflow-hidden"
       style={{
         background: BG,
         color: TEXT,
+        // Equal top and bottom spacing
+        paddingTop: SECTION_PAD,
+        paddingBottom: SECTION_PAD,
       }}
       aria-label="Technologies we use"
     >
@@ -609,22 +723,12 @@ export function TechStackShowcase() {
         }
 
         .tech-info {
-          animation:
-            techInfoIn
-            .55s
-            cubic-bezier(.22,1,.36,1)
-            both;
+          animation: techInfoIn .55s cubic-bezier(.22,1,.36,1) both;
         }
 
         .tech-card {
-          transition-property:
-            transform,
-            opacity,
-            box-shadow;
-
-          transition-timing-function:
-            cubic-bezier(.22,1,.36,1);
-
+          transition-property: transform, opacity, box-shadow, border-color;
+          transition-timing-function: cubic-bezier(.22,1,.36,1);
           cursor: pointer;
         }
 
@@ -639,10 +743,10 @@ export function TechStackShowcase() {
         }
       `}</style>
 
-      {/* ============================================================ */}
-      {/* Heading                                                       */}
-      {/* ============================================================ */}
+      {/* Background */}
+      <SectionBackground />
 
+      {/* Heading */}
       <div
         className={`
           mx-auto
@@ -651,72 +755,50 @@ export function TechStackShowcase() {
           px-6
           transition-all
           duration-1000
-          ${
-            started
-              ? 'translate-y-0 opacity-100'
-              : 'translate-y-4 opacity-0'
-          }
+          ${started ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}
         `}
       >
         <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-3 font-mono text-xs uppercase tracking-[0.3em] text-[#BBE351]">
-            // Our Tech Stack
-          </p>
+          <div className="mb-5">
+            <StatusPill label={`Squad Armory // Online · ${n}/${n} Tools Ready`} />
+          </div>
 
           <h2 className="text-3xl font-bold tracking-tight sm:text-5xl">
-            Languages we build with
+            Technologies we build with
           </h2>
 
           <p className="mt-4 text-base text-white/60 sm:text-lg">
-            We pick the right tool for every product. Here
-            are the core languages behind the software we
-            ship.
+            We pick the right tool for every product. Here is the full stack
+            behind the software we ship.
           </p>
         </div>
       </div>
 
-      {/* ============================================================ */}
-      {/* Carousel Stage                                                */}
-      {/* ============================================================ */}
-
+      {/* Carousel Stage */}
       <div
         ref={stageRef}
         role="region"
         aria-roledescription="carousel"
-        aria-label="Programming languages"
+        aria-label="Technologies"
         tabIndex={0}
         onKeyDown={onKeyDown}
-        onFocus={(e) =>
-          setKbFocus(
-            e.target.matches(':focus-visible'),
-          )
-        }
+        onFocus={(e) => setKbFocus(e.target.matches(':focus-visible'))}
         onBlur={() => setKbFocus(false)}
         onPointerDown={(e) => {
           setHolding(true);
 
-          /*
-           * Starting a press on text allows normal text
-           * selection instead of triggering swipe behavior.
-           */
-          const onText = (
-            e.target as HTMLElement
-          ).closest('[data-text]');
+          // Starting a press on text allows normal text selection
+          // instead of triggering swipe behavior.
+          const onText = (e.target as HTMLElement).closest('[data-text]');
 
-          dragStart.current = onText
-            ? null
-            : e.clientX;
+          dragStart.current = onText ? null : e.clientX;
         }}
         onPointerUp={(e) => {
-          if (
-            dragStart.current === null ||
-            phase !== 'carousel'
-          ) {
+          if (dragStart.current === null || phase !== 'carousel') {
             return;
           }
 
-          const dx =
-            e.clientX - dragStart.current;
+          const dx = e.clientX - dragStart.current;
 
           dragStart.current = null;
 
@@ -735,21 +817,14 @@ export function TechStackShowcase() {
           outline-none
           transition-opacity
           duration-700
-          ${
-            started
-              ? 'opacity-100'
-              : 'opacity-0'
-          }
+          ${started ? 'opacity-100' : 'opacity-0'}
         `}
         style={{
           height: H * 1.35,
           touchAction: 'pan-y',
         }}
       >
-        {/* ========================================================== */}
-        {/* Glow                                                         */}
-        {/* ========================================================== */}
-
+        {/* Glow behind the active card */}
         <div
           aria-hidden="true"
           className="
@@ -761,70 +836,39 @@ export function TechStackShowcase() {
             duration-[900ms]
           "
           style={{
-            width: Math.min(
-              cw * 1.1,
-              W * 5.6,
-            ),
-
+            width: Math.min(cw * 1.1, W * 5.6),
             height: H * 1.25,
-
-            transform:
-              'translate(-50%, -50%)',
-
+            transform: 'translate(-50%, -50%)',
             background: `
               radial-gradient(
                 closest-side,
-                ${PRIMARY}80 0%,
-                ${SECONDARY}99 55%,
+                ${PRIMARY}99 0%,
+                ${SECONDARY}cc 55%,
                 transparent 100%
               )
             `,
-
             filter: 'blur(28px)',
-
-            opacity:
-              phase === 'carousel'
-                ? 1
-                : 0,
+            opacity: phase === 'carousel' ? 1 : 0,
           }}
         />
 
-        {/* ========================================================== */}
-        {/* Cards                                                        */}
-        {/* ========================================================== */}
-
+        {/* Cards */}
         {TECHS.map((t, i) => {
-          const isActive =
-            i === active &&
-            phase === 'carousel';
+          const isActive = i === active && phase === 'carousel';
 
           return (
             <div
               key={t.id}
               role="button"
-              tabIndex={
-                isActive ? 0 : -1
-              }
-              onClick={() =>
-                phase === 'carousel' &&
-                setActive(i)
-              }
+              tabIndex={isActive ? 0 : -1}
+              onClick={() => phase === 'carousel' && setActive(i)}
               onKeyDown={(e) => {
-                if (
-                  e.key === 'Enter' ||
-                  e.key === ' '
-                ) {
+                if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
                   setActive(i);
                 }
               }}
-              aria-label={`
-                ${t.name}${
-                  isActive
-                    ? ' (selected)'
-                    : ''
-                }
-              `}
+              aria-label={`${t.name}${isActive ? ' (selected)' : ''}`}
               aria-current={isActive}
               className="
                 tech-card
@@ -842,23 +886,32 @@ export function TechStackShowcase() {
               style={{
                 ...cardStyle(i),
 
-                background: `
-                  linear-gradient(
-                    165deg,
-                    ${SECONDARY} 0%,
-                    ${BG} 100%
-                  )
-                `,
+                backgroundColor: BG,
+
+                // Active card gets a brighter green top so it stands out.
+                background: isActive
+                  ? `
+                    linear-gradient(
+                      165deg,
+                      ${PRIMARY}33 0%,
+                      ${SECONDARY} 42%,
+                      ${BG} 100%
+                    )
+                  `
+                  : `
+                    linear-gradient(
+                      165deg,
+                      ${SECONDARY} 0%,
+                      ${BG} 100%
+                    )
+                  `,
 
                 borderColor: isActive
-                  ? `${PRIMARY}99`
+                  ? PRIMARY
                   : 'rgba(255,255,255,0.1)',
               }}
             >
-              {/* ---------------------------------------------------- */}
-              {/* Dot grid texture                                      */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Dot grid texture */}
               <div
                 className="absolute inset-0"
                 style={{
@@ -868,10 +921,7 @@ export function TechStackShowcase() {
                       transparent 1.6px
                     )
                   `,
-
-                  backgroundSize:
-                    '0.06em 0.06em',
-
+                  backgroundSize: '0.06em 0.06em',
                   WebkitMaskImage: `
                     linear-gradient(
                       to bottom,
@@ -879,7 +929,6 @@ export function TechStackShowcase() {
                       transparent 70%
                     )
                   `,
-
                   maskImage: `
                     linear-gradient(
                       to bottom,
@@ -890,10 +939,7 @@ export function TechStackShowcase() {
                 }}
               />
 
-              {/* ---------------------------------------------------- */}
-              {/* Image glow                                             */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Image glow */}
               <div
                 className="absolute rounded-full"
                 style={{
@@ -901,38 +947,39 @@ export function TechStackShowcase() {
                   top: '0.06em',
                   width: '0.92em',
                   height: '0.92em',
-
                   background: `
                     radial-gradient(
                       closest-side,
-                      ${PRIMARY}40,
+                      ${PRIMARY}${isActive ? '66' : '40'},
                       transparent
                     )
                   `,
                 }}
               />
 
-              {/* ---------------------------------------------------- */}
-              {/* Bottom readability fade                                */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Bottom readability fade (lighter on the active card) */}
               <div
                 className="absolute inset-0"
                 style={{
-                  background: `
-                    linear-gradient(
-                      to bottom,
-                      transparent 45%,
-                      ${BG}f2 100%
-                    )
-                  `,
+                  background: isActive
+                    ? `
+                      linear-gradient(
+                        to bottom,
+                        transparent 55%,
+                        ${BG}b3 100%
+                      )
+                    `
+                    : `
+                      linear-gradient(
+                        to bottom,
+                        transparent 45%,
+                        ${BG}f2 100%
+                      )
+                    `,
                 }}
               />
 
-              {/* ---------------------------------------------------- */}
-              {/* Year                                                   */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Number badge (01, 02, ...) */}
               <div
                 className="absolute flex justify-end"
                 style={{
@@ -945,24 +992,18 @@ export function TechStackShowcase() {
                   className="rounded-full border font-semibold"
                   style={{
                     ...textProps.style,
-
-                    background: `${BG}b3`,
-                    borderColor: `${PRIMARY}59`,
-                    color: TEXT,
-
+                    background: isActive ? PRIMARY : `${BG}b3`,
+                    borderColor: isActive ? PRIMARY : `${PRIMARY}59`,
+                    color: isActive ? BG : TEXT,
                     fontSize: '0.06em',
-                    padding:
-                      '0.2em 0.7em',
+                    padding: '0.2em 0.7em',
                   }}
                 >
-                  {t.year}
+                  {pad(i + 1)}
                 </span>
               </div>
 
-              {/* ---------------------------------------------------- */}
-              {/* Language logo                                          */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Logo */}
               <div
                 className="absolute"
                 style={{
@@ -973,13 +1014,11 @@ export function TechStackShowcase() {
                 }}
               >
                 {/* Decorative rings */}
-
                 <div
                   className="absolute rounded-full border"
                   style={{
                     inset: '-0.07em',
-                    borderColor:
-                      `${PRIMARY}33`,
+                    borderColor: `${PRIMARY}${isActive ? '66' : '33'}`,
                   }}
                 />
 
@@ -987,13 +1026,11 @@ export function TechStackShowcase() {
                   className="absolute rounded-full border"
                   style={{
                     inset: '-0.14em',
-                    borderColor:
-                      `${PRIMARY}1a`,
+                    borderColor: `${PRIMARY}${isActive ? '33' : '1a'}`,
                   }}
                 />
 
                 {/* Logo tile */}
-
                 <div
                   className="
                     absolute
@@ -1003,15 +1040,9 @@ export function TechStackShowcase() {
                     justify-center
                   "
                   style={{
-                    borderRadius:
-                      '0.13em',
-
-                    padding:
-                      '0.085em',
-
-                    backgroundColor:
-                      TEXT,
-
+                    borderRadius: '0.13em',
+                    padding: '0.085em',
+                    backgroundColor: TEXT,
                     backgroundImage: `
                       radial-gradient(
                         circle at 15% 10%,
@@ -1019,10 +1050,7 @@ export function TechStackShowcase() {
                         ${PRIMARY}59 100%
                       )
                     `,
-
-                    border:
-                      `0.008em solid ${PRIMARY}`,
-
+                    border: `0.008em solid ${PRIMARY}`,
                     boxShadow: `
                       0 0 0 0.02em ${PRIMARY}40,
                       0 0.07em 0.18em ${PRIMARY}55
@@ -1033,10 +1061,7 @@ export function TechStackShowcase() {
                 </div>
               </div>
 
-              {/* ---------------------------------------------------- */}
-              {/* Card information                                       */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Card information: name + chips */}
               <div
                 className="absolute"
                 style={{
@@ -1047,11 +1072,7 @@ export function TechStackShowcase() {
               >
                 <div
                   {...textProps}
-                  className="
-                    w-fit
-                    font-bold
-                    leading-tight
-                  "
+                  className="w-fit font-bold leading-tight"
                   style={{
                     ...textProps.style,
                     fontSize: '0.11em',
@@ -1062,77 +1083,41 @@ export function TechStackShowcase() {
                 </div>
 
                 <div
-                  className="
-                    flex
-                    items-center
-                  "
+                  className="flex items-center"
                   style={{
-                    marginTop:
-                      '0.012em',
-
+                    marginTop: '0.012em',
                     gap: '0.025em',
                   }}
                 >
-                  {[t.kind, t.tags[0]].map(
-                    (chip, ci) => (
-                      <span
-                        key={chip}
-                        {...textProps}
-                        className="
-                          rounded-full
-                          border
-                        "
-                        style={{
-                          ...textProps.style,
-
-                          fontSize:
-                            '0.05em',
-
-                          padding:
-                            '0.18em 0.65em',
-
-                          color:
-                            ci === 0
-                              ? BG
-                              : TEXT,
-
-                          background:
-                            ci === 0
-                              ? PRIMARY
-                              : 'rgba(255,255,255,0.08)',
-
-                          borderColor:
-                            ci === 0
-                              ? PRIMARY
-                              : 'rgba(255,255,255,0.15)',
-                        }}
-                      >
-                        {chip}
-                      </span>
-                    ),
-                  )}
+                  {[t.kind, t.tags[0]].map((chip, ci) => (
+                    <span
+                      key={chip}
+                      {...textProps}
+                      className="rounded-full border"
+                      style={{
+                        ...textProps.style,
+                        fontSize: '0.05em',
+                        padding: '0.18em 0.65em',
+                        color: ci === 0 ? BG : TEXT,
+                        background:
+                          ci === 0 ? PRIMARY : 'rgba(255,255,255,0.08)',
+                        borderColor:
+                          ci === 0 ? PRIMARY : 'rgba(255,255,255,0.15)',
+                      }}
+                    >
+                      {chip}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              {/* ---------------------------------------------------- */}
-              {/* Side-card dimming                                     */}
-              {/* ---------------------------------------------------- */}
-
+              {/* Side-card dimming */}
               <div
-                className="
-                  pointer-events-none
-                  absolute
-                  inset-0
-                "
+                className="pointer-events-none absolute inset-0"
                 style={{
                   background: BG,
-
-                  opacity:
-                    1 -
-                    layoutOf(i).bright,
-
-                  transition:
-                    'opacity 800ms cubic-bezier(.22,1,.36,1)',
+                  opacity: 1 - layoutOf(i).bright,
+                  transition: 'opacity 800ms cubic-bezier(.22,1,.36,1)',
                 }}
               />
             </div>
@@ -1140,10 +1125,7 @@ export function TechStackShowcase() {
         })}
       </div>
 
-      {/* ============================================================ */}
-      {/* Active Technology Information                                 */}
-      {/* ============================================================ */}
-
+      {/* Active Technology Information (no tag pills here) */}
       <div
         className={`
           mx-auto
@@ -1154,76 +1136,30 @@ export function TechStackShowcase() {
           text-center
           transition-opacity
           duration-700
-          ${
-            phase === 'carousel'
-              ? 'opacity-100'
-              : 'opacity-0'
-          }
+          ${phase === 'carousel' ? 'opacity-100' : 'opacity-0'}
         `}
         style={{
-          minHeight: 230,
+          minHeight: 200,
         }}
       >
         <div className="mx-auto max-w-2xl">
-          <p
-            className="sr-only"
-            aria-live="polite"
-          >
+          <p className="sr-only" aria-live="polite">
             {tech.name}: {tech.tagline}
           </p>
 
-          <div
-            key={tech.id}
-            className="tech-info"
-          >
-            {/* Tags */}
-
-            <div
-              className="
-                mb-3
-                flex
-                flex-wrap
-                justify-center
-                gap-2
-              "
-            >
-              {tech.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="
-                    rounded-full
-                    border
-                    border-white/15
-                    px-3
-                    py-1
-                    text-xs
-                    text-white/70
-                  "
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
+          <div key={tech.id} className="tech-info">
             {/* Name */}
-
-            <h3 className="text-2xl font-bold sm:text-3xl">
-              {tech.name}
-            </h3>
+            <h3 className="text-2xl font-bold sm:text-3xl">{tech.name}</h3>
 
             {/* Tagline */}
-
             <p
               className="mt-1 text-sm font-medium"
-              style={{
-                color: PRIMARY,
-              }}
+              style={{ color: PRIMARY }}
             >
               {tech.tagline}
             </p>
 
             {/* Description */}
-
             <p
               className="
                 mt-4
@@ -1237,7 +1173,6 @@ export function TechStackShowcase() {
             </p>
 
             {/* Official site */}
-
             <a
               href={tech.url}
               target="_blank"
@@ -1286,10 +1221,7 @@ export function TechStackShowcase() {
         </div>
       </div>
 
-      {/* ============================================================ */}
-      {/* Controls                                                       */}
-      {/* ============================================================ */}
-
+      {/* Controls */}
       <div
         className={`
           mt-8
@@ -1300,23 +1232,19 @@ export function TechStackShowcase() {
           px-6
           transition-opacity
           duration-700
-          ${
-            phase === 'carousel'
-              ? 'opacity-100'
-              : 'opacity-0'
-          }
+          ${phase === 'carousel' ? 'opacity-100' : 'opacity-0'}
         `}
       >
         {/* Previous */}
-
         <button
           type="button"
           onClick={() => step(-1)}
-          aria-label="Previous language"
+          aria-label="Previous technology"
           className="
             flex
             h-10
             w-10
+            shrink-0
             items-center
             justify-center
             rounded-full
@@ -1331,40 +1259,25 @@ export function TechStackShowcase() {
           <Chevron dir="left" />
         </button>
 
-        {/* Pagination */}
-
-        <div className="flex items-center gap-2">
-          {TECHS.map((t, i) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`Show ${t.name}`}
-              className={`
-                h-2
-                rounded-full
-                transition-all
-                duration-300
-                ${
-                  i === active
-                    ? 'w-6 bg-[#BBE351]'
-                    : 'w-2 bg-white/25 hover:bg-white/50'
-                }
-              `}
-            />
-          ))}
+        {/* Counter */}
+        <div
+          className="min-w-[72px] text-center font-mono text-sm text-white/70"
+          aria-hidden="true"
+        >
+          <span style={{ color: PRIMARY }}>{pad(active + 1)}</span>
+          <span className="text-white/30"> / {pad(n)}</span>
         </div>
 
         {/* Next */}
-
         <button
           type="button"
           onClick={() => step(1)}
-          aria-label="Next language"
+          aria-label="Next technology"
           className="
             flex
             h-10
             w-10
+            shrink-0
             items-center
             justify-center
             rounded-full
