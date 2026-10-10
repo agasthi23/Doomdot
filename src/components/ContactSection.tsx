@@ -7,7 +7,6 @@ import { RobotAnchor } from './RobotCompanion';
 const P = COLORS.primary;
 const S = COLORS.secondary;
 const EMAIL = 'doomdotsquad@gmail.com';
-const CAPACITY = '1 sprint slot open';
 const MONO = "ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, monospace";
 
 const SERVICES = [
@@ -19,11 +18,15 @@ const SERVICES = [
   'Not sure yet',
 ];
 
-type Way = 'direct' | 'upwork' | 'fiverr';
-const WAYS: { id: Way; label: string }[] = [
-  { id: 'direct', label: 'Direct' },
-  { id: 'upwork', label: 'Upwork' },
-  { id: 'fiverr', label: 'Fiverr' },
+// How did you find us? — sources
+const DISCOVERY = [
+  'Instagram',
+  'LinkedIn',
+  'TikTok',
+  'Facebook',
+  'GitHub',
+  'A Friend',
+  'Other',
 ];
 
 const EXPECT = [
@@ -37,11 +40,11 @@ export type ContactData = {
   email: string;
   service: string;
   budget: string;
-  way: Way;
+  source: string;
   message: string;
 };
 
-const EMPTY: ContactData = { name: '', email: '', service: '', budget: '', way: 'direct', message: '' };
+const EMPTY: ContactData = { name: '', email: '', service: '', budget: '', source: '', message: '' };
 
 const label: CSSProperties = {
   display: 'block',
@@ -53,10 +56,39 @@ const label: CSSProperties = {
   color: 'rgba(255,255,255,0.55)',
 };
 
-const getDefaultService = (selectedService?: string) => {
-  if (selectedService && SERVICES.includes(selectedService)) {
-    return selectedService;
+/**
+ * Normalizes an incoming service string (from the Services section CTA)
+ * to an exact value from the SERVICES array.
+ *
+ * Handles:
+ *  - Exact match: "Front-End Development & UI/UX"
+ *  - Prefixed: "01 Front-End Development & UI/UX"
+ *  - Partial: "Front-End" → "Front-End Development & UI/UX"
+ */
+const getDefaultService = (selectedService?: string): string => {
+  if (!selectedService) return '';
+
+  const normalized = selectedService.trim().toLowerCase();
+
+  // 1) Exact match
+  const exact = SERVICES.find((s) => s.toLowerCase() === normalized);
+  if (exact) return exact;
+
+  // 2) Keyword fallback
+  const keywordMap: Record<string, string> = {
+    front: 'Front-End Development & UI/UX',
+    back: 'Back-End Engineering & Scalable APIs',
+    'full-stack': 'Full-Stack Web Applications',
+    fullstack: 'Full-Stack Web Applications',
+    mobile: 'Mobile & Web Applications',
+    ai: 'AI & Intelligent System Integrations',
+    intelligent: 'AI & Intelligent System Integrations',
+  };
+
+  for (const [key, value] of Object.entries(keywordMap)) {
+    if (normalized.includes(key)) return value;
   }
+
   return '';
 };
 
@@ -81,15 +113,9 @@ const CSS = `
 .ct-input:focus { border-color: ${P}; background: rgba(184,227,81,0.04); box-shadow: 0 0 0 3px ${P}1f; }
 textarea.ct-input { height: auto; flex: 1; min-height: 130px; padding: 10px 12px; resize: none; line-height: 1.45; }
 select.ct-input { appearance: none; -webkit-appearance: none; padding-right: 40px; cursor: pointer; }
-select.ct-input:invalid { color: rgba(255,255,255,0.3); }
 select.ct-input option { background: #0b110b; color: #fff; }
 .ct-select { position: relative; }
 .ct-select svg { position: absolute; right: 13px; top: 50%; transform: translateY(-50%); pointer-events: none; color: ${P}; }
-
-.ct-seg { display: inline-flex; padding: 3px; gap: 4px; border: 1px solid ${P}26; border-radius: 11px; background: rgba(255,255,255,0.03); }
-.ct-seg button { cursor: pointer; font: inherit; font-size: 13px; padding: 7px 16px; border: 1px solid transparent; border-radius: 8px; background: transparent; color: rgba(255,255,255,0.75); transition: background .2s, color .2s, border-color .2s; }
-.ct-seg button:hover { color: #fff; }
-.ct-seg button[aria-pressed="true"] { background: ${S}; border-color: ${P}59; color: ${P}; font-weight: 600; }
 
 .ct-send { display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; border-radius: 10px; padding: 0 22px; height: 44px; background: ${P}; color: #000; font-weight: 700; font-size: 14px; transition: transform .15s, opacity .2s; width: 100%; }
 .ct-send:hover:not(:disabled) { transform: translateY(-1px); }
@@ -114,8 +140,8 @@ export function ContactSection({
     }
   }, [selectedService]);
 
-  const set = <K extends keyof ContactData>(key: K, value: ContactData[K]) => setF((prev) => ({ ...prev, [key]: value }));
-  const way = WAYS.find((w) => w.id === f.way) ?? WAYS[0];
+  const set = <K extends keyof ContactData>(key: K, value: ContactData[K]) =>
+    setF((prev) => ({ ...prev, [key]: value }));
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -135,23 +161,23 @@ export function ContactSection({
         await onSubmit(f);
       }
 
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           access_key: accessKey,
           name: f.name,
           email: f.email,
-          subject: `[Doomdot Lead] Inquiry: ${f.service || 'General'} (${way.label})`,
+          subject: `[Doomdot Lead] Inquiry: ${f.service || 'General'}${f.source ? ` (via ${f.source})` : ''}`,
           message: `
 Name: ${f.name}
 Email: ${f.email}
 Service: ${f.service || 'None specified'}
 Budget: ${f.budget || 'Not specified'}
-Preferred Working Style: ${way.label}
+Found us via: ${f.source || 'Not specified'}
 
 Message:
 ${f.message}
@@ -161,7 +187,7 @@ ${f.message}
 
       const result = await response.json();
       if (response.status === 200 && result.success) {
-        setStatus({ kind: 'sent', text: "Thank you! Your message has been sent successfully." });
+        setStatus({ kind: 'sent', text: 'Thank you! Your message has been sent successfully.' });
         setF({ ...EMPTY, service: getDefaultService(selectedService) });
       } else {
         console.error('Web3Forms Error Details:', result);
@@ -218,25 +244,6 @@ ${f.message}
               <span style={{ color: P }}>.</span>
             </h2>
           </div>
-
-          {CAPACITY && (
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 8,
-                border: `1px solid ${P}40`,
-                borderRadius: 999,
-                padding: '6px 12px',
-                fontFamily: MONO,
-                fontSize: 11.5,
-                color: P,
-              }}
-            >
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: P }} />
-              {CAPACITY}
-            </div>
-          )}
         </div>
 
         <form onSubmit={handleSubmit} noValidate className="ct-panel">
@@ -309,19 +316,27 @@ ${f.message}
                 />
               </div>
 
-              <div style={{ gridColumn: '1 / -1' }}>
-                <span style={{ ...label, marginBottom: 6 }}>How would you like to work together?</span>
-                <div className="ct-seg" aria-label="Preferred working method">
-                  {WAYS.map((w) => (
-                    <button
-                      key={w.id}
-                      type="button"
-                      aria-pressed={f.way === w.id}
-                      onClick={() => set('way', w.id)}
-                    >
-                      {w.label}
-                    </button>
-                  ))}
+              <div>
+                <label style={label} htmlFor="ct-source">
+                  How did you find us?
+                </label>
+                <div className="ct-select">
+                  <select
+                    id="ct-source"
+                    className="ct-input"
+                    value={f.source}
+                    onChange={(e) => set('source', e.target.value)}
+                    aria-label="How did you find us"
+                    style={{ color: f.source ? '#fff' : 'rgba(255,255,255,0.3)' }}
+                  >
+                    <option value="">Select an option</option>
+                    {DISCOVERY.map((src) => (
+                      <option key={src} value={src}>
+                        {src}
+                      </option>
+                    ))}
+                  </select>
+                  <ChevronDown size={16} />
                 </div>
               </div>
             </div>
