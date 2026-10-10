@@ -214,7 +214,7 @@ const Reveal: React.FC<{ children: React.ReactNode; delay?: number; className?: 
  * Uses the photo (cropped into the capsule frame) if it loads,
  * otherwise falls back to a silhouette + initials.
  */
-const FounderFigure: React.FC<{ member: TeamMember }> = ({ member }) => {
+const FounderFigure: React.FC<{ member: TeamMember; full?: boolean }> = ({ member, full = false }) => {
   const [photoFailed, setPhotoFailed] = useState(false);
   const showPhoto = !!member.photo && !photoFailed;
 
@@ -226,7 +226,9 @@ const FounderFigure: React.FC<{ member: TeamMember }> = ({ member }) => {
           alt={member.name}
           draggable={false}
           onError={() => setPhotoFailed(true)}
-          className="absolute inset-0 w-full h-full object-cover object-top rounded-[56px] border border-[#B8E351]/40 group-hover:border-[#B8E351] transition-colors"
+          className={`absolute inset-0 w-full h-full object-cover object-top border border-[#B8E351]/40 group-hover:border-[#B8E351] transition-[border-radius,border-color,box-shadow] duration-700 ${
+            full ? 'rounded-[32px] shadow-[0_0_60px_rgba(184,227,81,0.15)]' : 'rounded-[56px]'
+          }`}
         />
       ) : (
         <>
@@ -256,11 +258,138 @@ const FounderFigure: React.FC<{ member: TeamMember }> = ({ member }) => {
 };
 
 /* ------------------------------------------------------------------ */
+/* ------------------------------------------------------------------ */
+/* Team backdrop (soft green aurora + particles, like the Services)    */
+/* ------------------------------------------------------------------ */
+
+const TEAM_BG_CSS = `
+  @keyframes tsDriftA {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -34px, 0) scale(1.08); }
+  }
+  @keyframes tsDriftB {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, 30px, 0) scale(0.94); }
+  }
+  @keyframes tsTwinkle {
+    0%, 100% { opacity: 0.12; }
+    50% { opacity: 0.85; }
+  }
+  .ts-drift-a { animation: tsDriftA 16s ease-in-out infinite; }
+  .ts-drift-b { animation: tsDriftB 20s ease-in-out infinite; }
+  .ts-twinkle { animation: tsTwinkle 5s ease-in-out infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .ts-drift-a, .ts-drift-b, .ts-twinkle { animation: none; }
+  }
+`;
+
+const TEAM_GLOWS: { cls: string; style: React.CSSProperties }[] = [
+  {
+    cls: 'ts-drift-a',
+    style: {
+      left: '-18%',
+      top: '2%',
+      width: 760,
+      height: 760,
+      background: 'radial-gradient(circle, rgba(96,140,22,0.34) 0%, rgba(96,140,22,0) 68%)',
+    },
+  },
+  {
+    cls: 'ts-drift-b',
+    style: {
+      right: '-20%',
+      top: '12%',
+      width: 820,
+      height: 820,
+      background: 'radial-gradient(circle, rgba(150,200,40,0.26) 0%, rgba(150,200,40,0) 68%)',
+    },
+  },
+  {
+    cls: 'ts-drift-b',
+    style: {
+      left: '-14%',
+      top: '50%',
+      width: 700,
+      height: 700,
+      background: 'radial-gradient(circle, rgba(96,140,22,0.26) 0%, rgba(96,140,22,0) 68%)',
+    },
+  },
+  {
+    cls: 'ts-drift-a',
+    style: {
+      right: '-16%',
+      top: '64%',
+      width: 760,
+      height: 760,
+      background: 'radial-gradient(circle, rgba(150,200,40,0.28) 0%, rgba(150,200,40,0) 68%)',
+    },
+  },
+];
+
+// [left %, top %, delay s, size px]
+const TEAM_PARTICLES: [number, number, number, number][] = [
+  [5, 6, 0, 3],
+  [14, 18, 1.4, 2],
+  [27, 9, 2.8, 2],
+  [41, 4, 0.7, 2],
+  [58, 11, 3.6, 3],
+  [72, 7, 2.1, 2],
+  [88, 15, 0.3, 3],
+  [95, 28, 3.1, 2],
+  [8, 34, 2.5, 3],
+  [22, 46, 0.9, 2],
+  [91, 44, 1.8, 2],
+  [4, 58, 3.3, 2],
+  [16, 70, 0.5, 3],
+  [34, 82, 2.2, 2],
+  [52, 90, 1.1, 2],
+  [67, 80, 3.8, 3],
+  [83, 72, 0.2, 2],
+  [94, 62, 2.6, 3],
+  [76, 92, 1.6, 2],
+  [12, 94, 3.0, 2],
+];
+
+const TeamBackdrop: React.FC = () => (
+  <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+    {/* soft light behind the header */}
+    <div
+      className="absolute inset-0"
+      style={{
+        background: 'radial-gradient(ellipse 55% 16% at 50% 7%, rgba(184,227,81,0.12), transparent 70%)',
+      }}
+    />
+
+    {/* drifting green aurora blobs */}
+    {TEAM_GLOWS.map((g, i) => (
+      <div key={i} className={`absolute rounded-full ${g.cls}`} style={g.style} />
+    ))}
+
+    {/* tiny twinkling particles */}
+    {TEAM_PARTICLES.map(([l, t, d, size], i) => (
+      <span
+        key={i}
+        className="ts-twinkle absolute rounded-full bg-[#B8E351]"
+        style={{
+          left: `${l}%`,
+          top: `${t}%`,
+          width: size,
+          height: size,
+          animationDelay: `${d}s`,
+          boxShadow: '0 0 8px rgba(184,227,81,0.7)',
+        }}
+      />
+    ))}
+  </div>
+);
+
+/* ------------------------------------------------------------------ */
 /* Why Choose Us (circular layout + expandable pills)                  */
 /* ------------------------------------------------------------------ */
 
-// px push to the right on desktop so the pills follow an arc
-const PILL_OFFSETS = [0, 56, 56, 0];
+// px push to the right on desktop. All 0 = clean aligned column.
+// Want the arc look again? use [0, 56, 56, 0]
+const PILL_OFFSETS = [0, 0, 0, 0];
 
 const WhyChooseUs: React.FC = () => {
   const reduced = prefersReducedMotion();
@@ -354,16 +483,7 @@ const WhyChooseUs: React.FC = () => {
       </div>
 
       {/* ---------------- RIGHT: expandable pills ---------------- */}
-      <div className="relative">
-        <div className="flex items-center gap-2 text-[10px] sm:text-xs font-mono text-zinc-400 mb-2">
-          <span aria-hidden="true" className="text-[#23430C]">///</span>
-          <span>ZERO MIDDLEMEN · GUARANTEED QUALITY</span>
-        </div>
-        <p className="mb-6 text-xs sm:text-sm text-zinc-400 font-sans max-w-md leading-relaxed">
-          Traditional agencies bill for layers of middle management. We replace overhead with direct,
-          battle-tested engineering output.
-        </p>
-
+      <div className="relative flex flex-col justify-center lg:min-h-[480px]">
         <div className="space-y-4">
           {WHY_CHOOSE_US.map((item, idx) => {
             const open = active === idx;
@@ -495,6 +615,25 @@ export const SquadSection: React.FC = () => {
   const [ringVisible, setRingVisible] = useState(false);
   const [overClickable, setOverClickable] = useState(false);
 
+  // natural aspect ratio (w / h) of each photo, so the spotlight can show the full frame
+  const [ratios, setRatios] = useState<Record<string, number>>({});
+  useEffect(() => {
+    let alive = true;
+    TEAM_MEMBERS.forEach((m) => {
+      if (!m.photo) return;
+      const img = new Image();
+      img.onload = () => {
+        if (alive && img.naturalWidth && img.naturalHeight) {
+          setRatios((r) => ({ ...r, [m.id]: img.naturalWidth / img.naturalHeight }));
+        }
+      };
+      img.src = m.photo;
+    });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
   if (selected !== null) lastIndex.current = selected;
   const shown = TEAM_MEMBERS[selected ?? lastIndex.current];
   const panelVisible = selected !== null && !switching;
@@ -619,7 +758,10 @@ export const SquadSection: React.FC = () => {
   ];
 
   return (
-    <section id="team" className="py-20 bg-[#050607] border-t border-[#23430C] relative cyber-grid overflow-hidden">
+    <section id="team" className="py-20 bg-[#050607] border-t border-[#23430C] relative overflow-hidden">
+      <style>{TEAM_BG_CSS}</style>
+      <TeamBackdrop />
+
       {/* Anchor alias for squad links */}
       <span id="squad" className="absolute -top-20" aria-hidden="true" />
       <RobotAnchor x="94%" y="4%" scale={0.35} />
@@ -629,349 +771,386 @@ export const SquadSection: React.FC = () => {
         {/* ================================================================= */}
         {/* 1. OUR TEAM — INTERACTIVE FOUNDER SELECTOR                        */}
         {/* ================================================================= */}
-        <Reveal className="mb-8 text-left">
-          <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 mb-3">
-            <span className="text-[#B8E351] font-bold">03</span>
-            <span aria-hidden="true" className="text-[#23430C]">///</span>
-            <span>CORE SQUAD</span>
-            <span aria-hidden="true" className="text-[#23430C]">///</span>
-            <span className="text-[#B8E351]">OUR TEAM</span>
-          </div>
-          <p className="text-sm sm:text-base text-zinc-300 max-w-2xl font-sans leading-relaxed">
-            Four founding software engineers and computer scientists working directly on your
-            codebase. Zero account managers, zero outsourced freelancers, and 100% technical transparency.
-          </p>
-        </Reveal>
+        <div className="relative">
+          <Reveal className="mb-8 text-center flex flex-col items-center">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#B8E351]/40 bg-[#050607]/70 backdrop-blur-sm shadow-[0_0_24px_rgba(184,227,81,0.12)] text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.04em] [word-spacing:-0.12em] text-[#B8E351]">
+              <span className="relative flex w-2.5 h-2.5 shrink-0">
+                <span className="absolute inset-0 rounded-full bg-[#B8E351] opacity-60 animate-ping" />
+                <span className="relative w-2.5 h-2.5 rounded-full bg-[#B8E351]" />
+              </span>
+              <span>
+                03 // Core Squad // Online
+                <span className="hidden sm:inline"> · 4/4 Founders Ready</span>
+              </span>
+            </div>
+            <h2 className="mt-4 font-display font-extrabold tracking-tight text-white text-4xl sm:text-5xl lg:text-6xl leading-[1.05]">
+              Our Team
+            </h2>
+            <p className="mt-4 font-display font-bold uppercase tracking-wide text-[#B8E351] text-sm sm:text-lg">
+              THE FUTURE ISN&apos;T WAITING. NEITHER ARE WE.
+            </p>
+            <p className="mt-3 text-sm sm:text-base text-zinc-300 max-w-3xl font-sans leading-relaxed">
+              Doomdot builds for the world that&apos;s coming, not the one that&apos;s fading. We bring
+              engineering, creativity, and emerging technology together to transform ambitious ideas into
+              products that move fast, think smart, and evolve with the world around them. We embrace the
+              bold, untangle the complex, and step confidently into the unknown — building technology that
+              helps shape what comes next.
+            </p>
+          </Reveal>
 
-        <div
-          ref={stageRef}
-          onMouseEnter={handleEnter}
-          onMouseMove={handleMove}
-          onMouseLeave={handleLeave}
-          className="relative rounded-3xl border border-[#23430C] bg-[#050607] overflow-hidden min-h-[580px] lg:min-h-[640px] mb-20 text-left shadow-[0_0_60px_rgba(184,227,81,0.08)]"
-        >
-          {/* ---------- backgrounds ---------- */}
-          <div aria-hidden="true" className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#08110a] via-[#050607] to-[#050607]" />
+          <div
+            ref={stageRef}
+            onMouseEnter={handleEnter}
+            onMouseMove={handleMove}
+            onMouseLeave={handleLeave}
+            className="relative rounded-3xl border border-[#23430C] bg-[#0a0e0b]/70 backdrop-blur-xl overflow-hidden min-h-[580px] lg:min-h-[640px] mb-20 text-left shadow-[0_0_60px_rgba(184,227,81,0.08),inset_0_1px_0_rgba(255,255,255,0.14)]"
+          >
+            {/* ---------- backgrounds ---------- */}
+            <div aria-hidden="true" className="absolute inset-0">
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0d170c]/70 via-[#070a08]/60 to-[#050607]/60" />
+              <div
+                className="absolute -top-24 -right-24 w-[420px] h-[420px] rounded-full"
+                style={{ background: 'radial-gradient(circle, rgba(184,227,81,0.20), transparent 68%)' }}
+              />
+              <div
+                className="absolute -bottom-32 -left-24 w-[460px] h-[460px] rounded-full"
+                style={{ background: 'radial-gradient(circle, rgba(60,130,60,0.28), transparent 68%)' }}
+              />
+              <div
+                className="absolute inset-0"
+                style={{
+                  background: 'radial-gradient(ellipse at 50% 90%, rgba(184,227,81,0.12), transparent 60%)',
+                  ...fade(selected === null),
+                }}
+              />
+              {TEAM_MEMBERS.map((m, i) => (
+                <div
+                  key={m.id}
+                  className="absolute inset-0"
+                  style={{
+                    background: `radial-gradient(circle at ${isDesktop ? '27% 72%' : '50% 30%'}, ${m.tint}33 0%, transparent 55%), radial-gradient(circle at 85% 20%, ${m.tint}12 0%, transparent 45%)`,
+                    opacity: selected === i ? 1 : 0,
+                    transition: reduced ? 'none' : 'opacity 900ms ease',
+                  }}
+                />
+              ))}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55)_100%)]" />
+            </div>
+
+            {/* ---------- top bar ---------- */}
+            <div className="absolute top-0 inset-x-0 z-30 h-14 px-5 sm:px-8 flex items-center justify-between border-b border-white/5">
+              <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B8E351] animate-pulse" />
+                <span>Founders</span>
+              </div>
+              <DoomLogo variant="lockup" size="sm" />
+              <div className="text-[10px] font-mono text-zinc-400 tabular-nums">
+                {selected === null ? '--' : pad(selected + 1)} / {pad(TOTAL)}
+              </div>
+            </div>
+
+            {/* ---------- heading (lineup mode) ---------- */}
             <div
-              className="absolute inset-0"
+              className="absolute left-5 sm:left-8 lg:left-10 top-[76px] z-10 max-w-[560px] pr-4"
               style={{
-                background: 'radial-gradient(ellipse at 50% 90%, rgba(184,227,81,0.12), transparent 60%)',
+                ...fade(selected === null),
+                pointerEvents: selected === null ? 'auto' : 'none',
+              }}
+            >
+              <h2 className="font-display font-black uppercase tracking-tight leading-[0.92] text-white text-[38px] sm:text-6xl lg:text-7xl">
+                Meet The
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E351] to-[#e4ff9a]">
+                  Founders
+                </span>
+              </h2>
+              <div
+                className="mt-4 h-[2px] bg-gradient-to-r from-[#B8E351] to-transparent"
+                style={{
+                  width: revealed ? '100%' : '0%',
+                  transition: reduced ? 'none' : `width 1200ms ${EASE} 300ms`,
+                }}
+              />
+            </div>
+
+            {/* ---------- floor glow (lineup mode) ---------- */}
+            <div
+              aria-hidden="true"
+              className="absolute z-0"
+              style={{
+                left: '4%',
+                right: '4%',
+                top: isDesktop ? 500 : 410,
+                height: 70,
+                background: 'radial-gradient(ellipse at center, rgba(184,227,81,0.18), transparent 70%)',
                 ...fade(selected === null),
               }}
             />
-            {TEAM_MEMBERS.map((m, i) => (
-              <div
-                key={m.id}
-                className="absolute inset-0"
-                style={{
-                  background: `radial-gradient(circle at ${isDesktop ? '27% 72%' : '50% 30%'}, ${m.tint}33 0%, transparent 55%), radial-gradient(circle at 85% 20%, ${m.tint}12 0%, transparent 45%)`,
-                  opacity: selected === i ? 1 : 0,
-                  transition: reduced ? 'none' : 'opacity 900ms ease',
-                }}
-              />
-            ))}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(0,0,0,0.55)_100%)]" />
-          </div>
 
-          {/* ---------- top bar ---------- */}
-          <div className="absolute top-0 inset-x-0 z-30 h-14 px-5 sm:px-8 flex items-center justify-between border-b border-white/5">
-            <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#B8E351] animate-pulse" />
-              <span>Founders</span>
-            </div>
-            <DoomLogo variant="lockup" size="sm" />
-            <div className="text-[10px] font-mono text-zinc-400 tabular-nums">
-              {selected === null ? '--' : pad(selected + 1)} / {pad(TOTAL)}
-            </div>
-          </div>
+            {/* ---------- founder figures (they morph between lineup and spotlight) ---------- */}
+            {TEAM_MEMBERS.map((m, i) => {
+              const inDetail = selected !== null;
+              const isSel = selected === i;
 
-          {/* ---------- heading (lineup mode) ---------- */}
-          <div
-            className="absolute left-5 sm:left-8 lg:left-10 top-[76px] z-10 max-w-[560px] pr-4"
-            style={{
-              ...fade(selected === null),
-              pointerEvents: selected === null ? 'auto' : 'none',
-            }}
-          >
-            <h2 className="font-display font-black uppercase tracking-tight leading-[0.92] text-white text-[38px] sm:text-6xl lg:text-7xl">
-              Meet The
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E351] to-[#e4ff9a]">
-                Founders
-              </span>
-            </h2>
-            <div
-              className="mt-4 h-[2px] bg-gradient-to-r from-[#B8E351] to-transparent"
-              style={{
-                width: revealed ? '100%' : '0%',
-                transition: reduced ? 'none' : `width 1200ms ${EASE} 300ms`,
-              }}
-            />
-          </div>
+              let left: string;
+              let top: number;
+              let scale: number;
+              let blur: number;
+              let opacity: number;
+              let z: number;
+              let w = 120;
+              let h = 230;
+              let maxW: string | undefined;
+              const ratio = ratios[m.id];
+              const full = isSel && !!ratio;
 
-          {/* ---------- floor glow (lineup mode) ---------- */}
-          <div
-            aria-hidden="true"
-            className="absolute z-0"
-            style={{
-              left: '4%',
-              right: '4%',
-              top: isDesktop ? 500 : 410,
-              height: 70,
-              background: 'radial-gradient(ellipse at center, rgba(184,227,81,0.18), transparent 70%)',
-              ...fade(selected === null),
-            }}
-          />
+              if (!inDetail) {
+                left = `${14 + i * 24}%`;
+                top = isDesktop ? 290 : 200;
+                scale = isDesktop ? 1.15 : 0.62;
+                blur = 0;
+                opacity = revealed ? 1 : 0;
+                z = 10;
+              } else if (isSel) {
+                left = isDesktop ? '27%' : '50%';
+                blur = switching ? 18 : 0;
+                opacity = switching ? 0.55 : 1;
+                z = 20;
+                if (ratio) {
+                  // full photo frame: sized to the photo's own aspect ratio (no cropping)
+                  h = isDesktop ? 510 : 270;
+                  w = Math.round(h * Math.min(ratio, 1.2));
+                  maxW = isDesktop ? '38%' : '80%';
+                  top = isDesktop ? 94 : 76;
+                  scale = 1;
+                } else {
+                  top = isDesktop ? 440 : 93;
+                  scale = isDesktop ? 2.5 : 1.1;
+                }
+              } else {
+                left = isDesktop ? (i < (selected as number) ? '4%' : '58%') : '50%';
+                top = isDesktop ? 440 : 93;
+                scale = isDesktop ? 2.3 : 1.1;
+                blur = 16;
+                opacity = 0.12;
+                z = 5;
+              }
 
-          {/* ---------- founder figures (they morph between lineup and spotlight) ---------- */}
-          {TEAM_MEMBERS.map((m, i) => {
-            const inDetail = selected !== null;
-            const isSel = selected === i;
+              const lift = !inDetail && !revealed ? 90 : 0;
+              const d = !inDetail && !introDone ? i * 140 : 0;
 
-            let left: string;
-            let top: number;
-            let scale: number;
-            let blur: number;
-            let opacity: number;
-            let z: number;
-
-            if (!inDetail) {
-              left = `${14 + i * 24}%`;
-              top = isDesktop ? 290 : 200;
-              scale = isDesktop ? 1.15 : 0.62;
-              blur = 0;
-              opacity = revealed ? 1 : 0;
-              z = 10;
-            } else if (isSel) {
-              left = isDesktop ? '27%' : '50%';
-              top = isDesktop ? 440 : 93;
-              scale = isDesktop ? 2.5 : 1.1;
-              blur = switching ? 18 : 0;
-              opacity = switching ? 0.55 : 1;
-              z = 20;
-            } else {
-              left = isDesktop ? (i < (selected as number) ? '4%' : '58%') : '50%';
-              top = isDesktop ? 440 : 93;
-              scale = isDesktop ? 2.3 : 1.1;
-              blur = 16;
-              opacity = 0.12;
-              z = 5;
-            }
-
-            const lift = !inDetail && !revealed ? 90 : 0;
-            const d = !inDetail && !introDone ? i * 140 : 0;
-
-            return (
-              <div
-                key={m.id}
-                className="absolute"
-                style={{
-                  left,
-                  top,
-                  width: 120,
-                  height: 230,
-                  zIndex: z,
-                  opacity,
-                  filter: `blur(${blur}px)`,
-                  transform: `translate(-50%, ${lift}px) scale(${scale})`,
-                  transformOrigin: '50% 100%',
-                  pointerEvents: inDetail ? 'none' : 'auto',
-                  transition: reduced
-                    ? 'none'
-                    : `left 900ms ${EASE} 0ms, top 900ms ${EASE} 0ms, transform 900ms ${EASE} ${d}ms, filter 700ms ease 0ms, opacity 700ms ease ${d}ms`,
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={() => openFounder(i)}
-                  onMouseEnter={() => !inDetail && sound.playHover()}
-                  tabIndex={inDetail ? -1 : 0}
-                  aria-label={`Open ${m.name}`}
-                  className="group relative block w-full h-full rounded-[56px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351]"
+              return (
+                <div
+                  key={m.id}
+                  className="absolute"
+                  style={{
+                    left,
+                    top,
+                    width: w,
+                    height: h,
+                    maxWidth: maxW,
+                    zIndex: z,
+                    opacity,
+                    filter: `blur(${blur}px)`,
+                    transform: `translate(-50%, ${lift}px) scale(${scale})`,
+                    transformOrigin: '50% 100%',
+                    pointerEvents: inDetail ? 'none' : 'auto',
+                    transition: reduced
+                      ? 'none'
+                      : `left 900ms ${EASE} 0ms, top 900ms ${EASE} 0ms, width 900ms ${EASE} 0ms, height 900ms ${EASE} 0ms, transform 900ms ${EASE} ${d}ms, filter 700ms ease 0ms, opacity 700ms ease ${d}ms`,
+                  }}
                 >
-                  <div className="relative w-full h-full transition-transform duration-500 group-hover:-translate-y-3">
-                    <FounderFigure member={m} />
+                  <button
+                    type="button"
+                    onClick={() => openFounder(i)}
+                    onMouseEnter={() => !inDetail && sound.playHover()}
+                    tabIndex={inDetail ? -1 : 0}
+                    aria-label={`Open ${m.name}`}
+                    className="group relative block w-full h-full rounded-[56px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351]"
+                  >
+                    <div className="relative w-full h-full transition-transform duration-500 group-hover:-translate-y-3">
+                      <FounderFigure member={m} full={full} />
 
-                    {/* name plate (lineup only) */}
-                    <div
-                      className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[160px] text-center"
-                      style={fade(!inDetail)}
-                    >
-                      <div className="font-display font-bold text-white text-[18px] lg:text-[15px] group-hover:text-[#B8E351] transition-colors">
-                        {m.firstName}
-                      </div>
-                      <div className="font-mono text-[10px] text-[#B8E351] tracking-wider">
-                        {m.discipline} · {m.index}
+                      {/* name plate (lineup only) */}
+                      <div
+                        className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-[160px] text-center"
+                        style={fade(!inDetail)}
+                      >
+                        <div className="font-display font-bold text-white text-[18px] lg:text-[15px] group-hover:text-[#B8E351] transition-colors">
+                          {m.firstName}
+                        </div>
+                        <div className="font-mono text-[10px] text-[#B8E351] tracking-wider">
+                          {m.discipline} · {m.index}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </button>
-              </div>
-            );
-          })}
-
-          {/* ---------- bottom bar (lineup mode) ---------- */}
-          <div
-            className="absolute bottom-0 inset-x-0 z-20 px-5 sm:px-8 lg:px-10 py-5 flex items-center gap-4"
-            style={{
-              ...fade(selected === null),
-              pointerEvents: selected === null ? 'auto' : 'none',
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => openFounder(0)}
-              tabIndex={selected === null ? 0 : -1}
-              aria-label="Open first founder"
-              className="shrink-0 w-11 h-11 rounded-full border-2 border-white/80 hover:border-[#B8E351] hover:text-[#B8E351] text-white flex items-center justify-center transition-colors"
-            >
-              <ArrowRight className="w-5 h-5" />
-            </button>
-            <div>
-              <div className="text-[11px] font-display font-bold tracking-[0.2em] text-white uppercase">
-                DoomDot Squad
-              </div>
-              <p className="text-[11px] text-zinc-400 max-w-sm leading-snug">
-                Click a founder to explore their profile and stack.
-              </p>
-            </div>
-          </div>
-
-          {/* ---------- detail panel (spotlight mode) ---------- */}
-          <div
-            className={
-              isDesktop
-                ? 'absolute z-30 top-[84px] left-[48%] right-10'
-                : selected === null
-                ? 'absolute z-30 inset-x-0 top-0 px-5'
-                : 'relative z-30 px-5 sm:px-8 pt-[360px] pb-8'
-            }
-            style={{ pointerEvents: panelVisible ? 'auto' : 'none' }}
-          >
-            <div style={st(0)} className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.2em]">
-              <span className="text-[#B8E351] font-bold">
-                {shown.discipline === 'SE' ? 'Software Engineering' : 'Computer Science'}
-              </span>
-              <span className="text-zinc-500">
-                {shown.index} / {pad(TOTAL)}
-              </span>
-              <span className="h-px flex-1 bg-gradient-to-r from-[#B8E351]/70 to-transparent" />
-            </div>
-
-            <h3
-              style={st(1)}
-              className="mt-4 font-display font-black uppercase tracking-tight leading-[0.92] text-white text-4xl sm:text-5xl lg:text-6xl"
-            >
-              <span className="block">{shown.firstName}</span>
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#B8E351] to-[#e4ff9a]">
-                {shown.lastName}
-              </span>
-            </h3>
-
-            <p style={st(2)} className="mt-3 text-xs font-mono text-[#B8E351] font-semibold">
-              {shown.role}
-            </p>
-
-            <div style={st(3)} className="mt-4 pt-4 border-t border-[#23430C] space-y-2.5">
-              {detailRows.map(([label, value]) => (
-                <div key={label} className="grid grid-cols-[96px_1fr] gap-x-4 items-baseline">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">{label}</span>
-                  <span className="text-xs text-zinc-200 font-sans leading-snug">{value}</span>
+                  </button>
                 </div>
-              ))}
+              );
+            })}
+
+            {/* ---------- bottom bar (lineup mode) ---------- */}
+            <div
+              className="absolute bottom-0 inset-x-0 z-20 px-5 sm:px-8 lg:px-10 py-5 flex items-center gap-4"
+              style={{
+                ...fade(selected === null),
+                pointerEvents: selected === null ? 'auto' : 'none',
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => openFounder(0)}
+                tabIndex={selected === null ? 0 : -1}
+                aria-label="Open first founder"
+                className="shrink-0 w-11 h-11 rounded-full border-2 border-white/80 hover:border-[#B8E351] hover:text-[#B8E351] text-white flex items-center justify-center transition-colors"
+              >
+                <ArrowRight className="w-5 h-5" />
+              </button>
+              <div>
+                <div className="text-[11px] font-display font-bold tracking-[0.2em] text-white uppercase">
+                  DoomDot Squad
+                </div>
+                <p className="text-[11px] text-zinc-400 max-w-sm leading-snug">
+                  Click a founder to explore their profile and stack.
+                </p>
+              </div>
             </div>
 
-            <div style={st(4)} className="mt-5">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-2">Tech stack</div>
-              <div className="flex flex-wrap gap-2">
-                {shown.specialties.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 py-1.5 rounded-md bg-[#030602]/90 border border-[#23430C] hover:border-[#B8E351] text-[11px] font-mono text-zinc-200 transition-colors"
-                  >
-                    {tech}
-                  </span>
+            {/* ---------- detail panel (spotlight mode) ---------- */}
+            <div
+              className={
+                isDesktop
+                  ? 'absolute z-30 top-[84px] left-[48%] right-10'
+                  : selected === null
+                  ? 'absolute z-30 inset-x-0 top-0 px-5'
+                  : 'relative z-30 px-5 sm:px-8 pt-[360px] pb-8'
+              }
+              style={{ pointerEvents: panelVisible ? 'auto' : 'none' }}
+            >
+              <div style={st(0)} className="flex items-center gap-3 text-[10px] font-mono uppercase tracking-[0.2em]">
+                <span className="text-[#B8E351] font-bold">
+                  {shown.discipline === 'SE' ? 'Software Engineering' : 'Computer Science'}
+                </span>
+                <span className="text-zinc-500">
+                  {shown.index} / {pad(TOTAL)}
+                </span>
+                <span className="h-px flex-1 bg-gradient-to-r from-[#B8E351]/70 to-transparent" />
+              </div>
+
+              <h3
+                style={st(1)}
+                className="mt-4 font-display font-black uppercase tracking-tight leading-[0.92] text-white text-4xl sm:text-5xl lg:text-6xl"
+              >
+                <span className="block">{shown.firstName}</span>
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#B8E351] to-[#e4ff9a]">
+                  {shown.lastName}
+                </span>
+              </h3>
+
+              <p style={st(2)} className="mt-3 text-xs font-mono text-[#B8E351] font-semibold">
+                {shown.role}
+              </p>
+
+              <div style={st(3)} className="mt-4 pt-4 border-t border-[#23430C] space-y-2.5">
+                {detailRows.map(([label, value]) => (
+                  <div key={label} className="grid grid-cols-[96px_1fr] gap-x-4 items-baseline">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500">{label}</span>
+                    <span className="text-xs text-zinc-200 font-sans leading-snug">{value}</span>
+                  </div>
                 ))}
               </div>
-            </div>
 
-            <div style={st(5)} className="mt-6 flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={prev}
-                  aria-label="Previous founder"
-                  className="w-11 h-11 rounded-full border-2 border-white/80 hover:border-[#B8E351] hover:text-[#B8E351] text-white flex items-center justify-center transition-colors"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
-                <button
-                  type="button"
-                  onClick={next}
-                  aria-label="Next founder"
-                  className="w-11 h-11 rounded-full border-2 border-white/80 hover:border-[#B8E351] hover:text-[#B8E351] text-white flex items-center justify-center transition-colors"
-                >
-                  <ArrowRight className="w-5 h-5" />
-                </button>
+              <div style={st(4)} className="mt-5">
+                <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-2">Tech stack</div>
+                <div className="flex flex-wrap gap-2">
+                  {shown.specialties.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-2.5 py-1.5 rounded-md bg-[#030602]/90 border border-[#23430C] hover:border-[#B8E351] text-[11px] font-mono text-zinc-200 transition-colors"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <a
-                  href={shown.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => sound.playClick()}
-                  className="p-2 rounded-lg bg-[#040802] border border-[#23430C] hover:border-[#B8E351] hover:text-[#B8E351] text-zinc-300 transition-colors"
-                  title={`${shown.name} GitHub`}
-                  aria-label={`${shown.name} GitHub`}
-                >
-                  <Github className="w-4 h-4" />
-                </a>
-                <a
-                  href={shown.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={() => sound.playClick()}
-                  className="p-2 rounded-lg bg-[#040802] border border-[#23430C] hover:border-[#B8E351] hover:text-[#B8E351] text-zinc-300 transition-colors"
-                  title={`${shown.name} LinkedIn`}
-                  aria-label={`${shown.name} LinkedIn`}
-                >
-                  <Linkedin className="w-4 h-4" />
-                </a>
-                <button
-                  type="button"
-                  onClick={closeFounder}
-                  className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[#23430C] hover:border-[#B8E351] hover:text-[#B8E351] text-zinc-300 text-[10px] font-mono uppercase tracking-wider transition-colors"
-                >
-                  <LayoutGrid className="w-3.5 h-3.5" />
-                  <span>All founders</span>
-                </button>
+              <div style={st(5)} className="mt-6 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={prev}
+                    aria-label="Previous founder"
+                    className="w-11 h-11 rounded-full border-2 border-white/80 hover:border-[#B8E351] hover:text-[#B8E351] text-white flex items-center justify-center transition-colors"
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={next}
+                    aria-label="Next founder"
+                    className="w-11 h-11 rounded-full border-2 border-white/80 hover:border-[#B8E351] hover:text-[#B8E351] text-white flex items-center justify-center transition-colors"
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <a
+                    href={shown.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => sound.playClick()}
+                    className="p-2 rounded-lg bg-[#040802] border border-[#23430C] hover:border-[#B8E351] hover:text-[#B8E351] text-zinc-300 transition-colors"
+                    title={`${shown.name} GitHub`}
+                    aria-label={`${shown.name} GitHub`}
+                  >
+                    <Github className="w-4 h-4" />
+                  </a>
+                  <a
+                    href={shown.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={() => sound.playClick()}
+                    className="p-2 rounded-lg bg-[#040802] border border-[#23430C] hover:border-[#B8E351] hover:text-[#B8E351] text-zinc-300 transition-colors"
+                    title={`${shown.name} LinkedIn`}
+                    aria-label={`${shown.name} LinkedIn`}
+                  >
+                    <Linkedin className="w-4 h-4" />
+                  </a>
+                  <button
+                    type="button"
+                    onClick={closeFounder}
+                    className="inline-flex items-center gap-1.5 px-3 h-9 rounded-full border border-[#23430C] hover:border-[#B8E351] hover:text-[#B8E351] text-zinc-300 text-[10px] font-mono uppercase tracking-wider transition-colors"
+                  >
+                    <LayoutGrid className="w-3.5 h-3.5" />
+                    <span>All founders</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* ---------- cursor ring ---------- */}
-          {finePointer && !reduced && (
-            <div
-              ref={ringRef}
-              aria-hidden="true"
-              className="pointer-events-none absolute left-0 top-0 z-40"
-              style={{ opacity: ringVisible ? 1 : 0, transition: 'opacity 200ms ease' }}
-            >
+            {/* ---------- cursor ring ---------- */}
+            {finePointer && !reduced && (
               <div
-                style={{
-                  width: ringMode === 'pill' ? 64 : 36,
-                  height: ringMode === 'pill' ? 26 : 36,
-                  borderRadius: 9999,
-                  border: `2px solid ${ringMode === 'idle' ? 'rgba(255,255,255,0.85)' : '#B8E351'}`,
-                  background: ringMode === 'hover' ? 'rgba(184,227,81,0.15)' : 'transparent',
-                  transform: `translate(-50%, -50%) rotate(${ringMode === 'pill' ? -35 : 0}deg) scale(${ringMode === 'hover' ? 1.5 : 1})`,
-                  transition: `all 300ms ${EASE}`,
-                }}
-              />
-            </div>
-          )}
+                ref={ringRef}
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 top-0 z-40"
+                style={{ opacity: ringVisible ? 1 : 0, transition: 'opacity 200ms ease' }}
+              >
+                <div
+                  style={{
+                    width: ringMode === 'pill' ? 64 : 36,
+                    height: ringMode === 'pill' ? 26 : 36,
+                    borderRadius: 9999,
+                    border: `2px solid ${ringMode === 'idle' ? 'rgba(255,255,255,0.85)' : '#B8E351'}`,
+                    background: ringMode === 'hover' ? 'rgba(184,227,81,0.15)' : 'transparent',
+                    transform: `translate(-50%, -50%) rotate(${ringMode === 'pill' ? -35 : 0}deg) scale(${ringMode === 'hover' ? 1.5 : 1})`,
+                    transition: `all 300ms ${EASE}`,
+                  }}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* ================================================================= */}
