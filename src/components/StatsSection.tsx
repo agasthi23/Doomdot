@@ -50,6 +50,23 @@ function useCountUp(end: number, start: boolean, duration = 1800, delay = 1000) 
   return count;
 }
 
+// Pill badge with a pulsing "active" dot
+function StatusPill({ label }: { label: string }) {
+  return (
+    <div className="inline-flex items-center gap-3 rounded-full border border-[#BBE351]/30 bg-[#BBE351]/5 px-5 py-2">
+      <span className="relative flex h-2.5 w-2.5">
+        {/* Pulsing ring */}
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#BBE351] opacity-75 motion-reduce:animate-none" />
+        {/* Solid dot */}
+        <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#BBE351] shadow-[0_0_8px_#BBE351]" />
+      </span>
+      <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#BBE351]">
+        {label}
+      </span>
+    </div>
+  );
+}
+
 function StatCard({
   stat,
   started,
@@ -126,7 +143,11 @@ export function StatsSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="stats" className="bg-[#050607] px-6 py-16">
+    <section
+      ref={sectionRef}
+      id="stats"
+      className="bg-[#050607] px-6 pt-16 pb-48"
+    >
       {/* Keyframes for the light sweep */}
       <style>{`
         @keyframes stat-sweep {
@@ -142,9 +163,9 @@ export function StatsSection() {
             started ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
           }`}
         >
-          <p className="mb-3 text-xs uppercase tracking-[0.3em] text-white/60">
-            The Proof
-          </p>
+          <div className="mb-5">
+            <StatusPill label="The Proof" />
+          </div>
           <h2
             className="text-2xl font-extrabold tracking-wide text-white md:text-4xl"
             style={{ fontFamily: "'Unbounded', sans-serif" }}

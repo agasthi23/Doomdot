@@ -113,64 +113,95 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated CI/CD pipeline configuration for fast deployments',
       'Production-ready environment configurations',
     ],
-    techStack: ['React', 'Node.js', 'PostgreSQL', 'Stripe', 'Docker', 'Git'],
+    techStack: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'Git'],
     slaTimeline: '7 - 14 Business Days',
     icon: <Layers className="w-5 h-5" />,
   },
   {
-    id: 'mobile-web',
+    id: 'custom-software',
+    number: '02',
+    category: 'BESPOKE SOFTWARE ENGINEERING (TAILORED DIGITAL SYSTEMS)',
+    title: 'Custom Software Applications',
+    summary:
+      'Purpose-built software solutions engineered around unique business requirements, from workflow automation and desktop applications to intelligent business management systems.',
+    overview:
+      'End-to-end custom software engineering focused on solving real-world business challenges through tailored application architecture, intelligent automation, seamless data management, and scalable system integrations. From initial requirements analysis to testing, deployment, and ongoing maintenance, every solution is designed around your operational needs.',
+    deliverables: [
+      'Custom-built software applications tailored to specific business workflows and operational requirements',
+      'Desktop and cross-platform application development for compatible operating systems and devices',
+      'Business process automation to eliminate repetitive tasks and improve operational efficiency',
+      'Structured database design with reliable data storage, validation, and retrieval',
+      'Third-party API integrations connecting external services and existing business systems',
+      'Secure user authentication, role-based access control, and permission management',
+      'Comprehensive application testing, debugging, and performance optimization',
+      'Deployment configuration, technical documentation, and source code handover',
+    ],
+    architectureDetails: [
+      'Modular software architecture designed for maintainability and future expansion',
+      'Separation of business logic, data access, and presentation layers where appropriate',
+      'Secure data handling with input validation and controlled access to sensitive operations',
+      'Efficient database operations and reliable error-handling mechanisms',
+      'Automated testing and version control workflows to support consistent software quality',
+      'Platform-specific packaging and deployment configurations based on project requirements',
+    ],
+    techStack: ['Python', 'C#', '.NET', 'Flutter', 'Dart', 'PostgreSQL', 'Git'],
+    slaTimeline: 'Project-Based Timeline',
+    icon: <Code2 className="w-5 h-5" />,
+  },
+  {
+    id: 'mobile',
     number: '04',
     category: 'CROSS-PLATFORM & NATIVE MOBILE SOLUTIONS',
-    title: 'Mobile & Web Applications',
+    title: 'Mobile Applications',
     summary:
-      'From cross-platform mobile applications to responsive web apps, we craft touch-optimized digital experiences with zero layout shifts.',
+      'From concept to app store launch, we craft touch-optimized mobile experiences for iOS and Android with smooth, native-feeling performance.',
     overview:
-      'We engineer fluid applications that bridge the gap between web browsers and mobile devices. Utilizing unified, high-performance codebases, we deliver native-feeling gesture controls, smooth frame rates, and offline-ready capabilities.',
+      'We engineer fluid mobile applications from a single high-performance codebase, delivering native-feeling gesture controls, smooth frame rates, and offline-ready capabilities across iOS and Android.',
     deliverables: [
       'Cross-platform mobile app development for iOS and Android',
-      'Responsive adaptive layouts optimized for varying screen dimensions',
+      'Adaptive layouts optimized for phones and tablets of varying screen sizes',
       'Native device feature integrations (camera, push notifications, local storage)',
       'Smooth gesture navigation and fluid transition animations',
       'App store readiness packaging and asset generation',
-      'Unified web and mobile shared component architecture',
+      'Offline-first data handling with background syncing',
     ],
     architectureDetails: [
-      'Optimized bundle sizing for fast mobile startup speeds',
-      'Cross-device testing coverage across major OS versions',
+      'Optimized bundle sizing for fast app startup',
+      'Cross-device testing coverage across major iOS and Android versions',
       'Efficient state management for offline data syncing',
       'Clean native bridge configurations',
     ],
-    techStack: ['React Native', 'Next.js', 'TypeScript', 'Expo', 'Tailwind CSS'],
+    techStack: ['React Native', 'TypeScript', 'Expo', 'NativeWind'],
     slaTimeline: '7 - 15 Business Days',
     icon: <Smartphone className="w-5 h-5" />,
   },
-  {
-    id: 'ai-integrations',
-    number: '05',
-    category: 'MACHINE LEARNING & LLM AUTOMATION',
-    title: 'AI & Intelligent System Integrations',
-    summary:
-      'We design and integrate intelligent systems—incorporating modern machine learning pipelines, LLMs, and automated workflow tools.',
-    overview:
-      'We build and integrate next-generation intelligent capabilities into your software ecosystem. From custom data processing pipelines and vector search configurations to advanced LLM-powered workflows, we make your product smart.',
-    deliverables: [
-      'Custom AI model and LLM API integrations (OpenAI, Anthropic, local models)',
-      'Vector database setup and semantic search implementation (Pinecone, Chroma)',
-      'Automated data preprocessing and ingestion pipelines',
-      'Prompt engineering frameworks and agentic workflow structures',
-      'High-performance FastAPI microservices for AI task handling',
-      'Secure API key management and token usage monitoring',
-    ],
-    architectureDetails: [
-      'Optimized context window management to minimize latency and costs',
-      'Robust fallback handling for API rate limits and downtime',
-      'Secure handling of proprietary user data and privacy compliance',
-      'Asynchronous background processing for long-running AI tasks',
-    ],
-    techStack: ['Python', 'PyTorch', 'OpenAI API', 'LangChain', 'FastAPI', 'Vector DBs'],
-    slaTimeline: '5 - 12 Business Days',
-    icon: <Cpu className="w-5 h-5" />,
-  },
+  // {
+  //   id: 'ai-integrations',
+  //   number: '05',
+  //   category: 'MACHINE LEARNING & LLM AUTOMATION',
+  //   title: 'AI & Intelligent System Integrations',
+  //   summary:
+  //     'We design and integrate intelligent systems—incorporating modern machine learning pipelines, LLMs, and automated workflow tools.',
+  //   overview:
+  //     'We build and integrate next-generation intelligent capabilities into your software ecosystem. From custom data processing pipelines and vector search configurations to advanced LLM-powered workflows, we make your product smart.',
+  //   deliverables: [
+  //     'Custom AI model and LLM API integrations (OpenAI, Anthropic, local models)',
+  //     'Vector database setup and semantic search implementation (Pinecone, Chroma)',
+  //     'Automated data preprocessing and ingestion pipelines',
+  //     'Prompt engineering frameworks and agentic workflow structures',
+  //     'High-performance FastAPI microservices for AI task handling',
+  //     'Secure API key management and token usage monitoring',
+  //   ],
+  //   architectureDetails: [
+  //     'Optimized context window management to minimize latency and costs',
+  //     'Robust fallback handling for API rate limits and downtime',
+  //     'Secure handling of proprietary user data and privacy compliance',
+  //     'Asynchronous background processing for long-running AI tasks',
+  //   ],
+  //   techStack: ['Python', 'PyTorch', 'OpenAI API', 'LangChain', 'FastAPI', 'Vector DBs'],
+  //   slaTimeline: '5 - 12 Business Days',
+  //   icon: <Cpu className="w-5 h-5" />,
+  // },
 ];
 
 export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
@@ -211,14 +242,14 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
             className="px-4 py-2 rounded-lg border border-white/15 hover:border-[#BBE351] text-xs font-mono text-white/80 hover:text-white transition-colors flex items-center gap-2 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351]"
           >
             <ArrowLeft className="w-4 h-4 text-[#BBE351] group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Studio Overview</span>
+            <span>Back to Home</span>
           </button>
 
           <div className="flex items-center gap-3">
             <DoomLogo variant="lockup" size="sm" />
-            <span className="hidden sm:inline text-xs font-mono text-white/50">
+            {/* <span className="hidden sm:inline text-xs font-mono text-white/50">
               /// DETAILED SERVICES SPECIFICATION
-            </span>
+            </span> */}
           </div>
         </div>
 
@@ -266,24 +297,21 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
                   sound.playClick();
                   setSelectedServiceId(bp.id);
                 }}
-                className={`relative p-4 rounded-xl border text-left transition-colors duration-200 cursor-pointer flex flex-col justify-between gap-4 min-h-[112px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351] ${
-                  isActive
-                    ? 'bg-[#23430C]/40 border-[#BBE351]'
-                    : 'bg-white/[0.02] border-white/10 hover:border-[#BBE351]/50 hover:bg-white/[0.04]'
-                }`}
+                className={`relative p-4 rounded-xl border text-left transition-colors duration-200 cursor-pointer flex flex-col justify-between gap-4 min-h-[112px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351] ${isActive
+                  ? 'bg-[#23430C]/40 border-[#BBE351]'
+                  : 'bg-white/[0.02] border-white/10 hover:border-[#BBE351]/50 hover:bg-white/[0.04]'
+                  }`}
               >
                 <div className="flex items-center justify-between">
                   <span
-                    className={`text-xs font-mono font-bold ${
-                      isActive ? 'text-[#BBE351]' : 'text-white/50'
-                    }`}
+                    className={`text-xs font-mono font-bold ${isActive ? 'text-[#BBE351]' : 'text-white/50'
+                      }`}
                   >
                     {bp.number}
                   </span>
                   <span
-                    className={`w-9 h-9 rounded-lg flex items-center justify-center ${
-                      isActive ? 'bg-[#BBE351] text-[#050607]' : 'bg-[#23430C]/60 text-[#BBE351]'
-                    }`}
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center ${isActive ? 'bg-[#BBE351] text-[#050607]' : 'bg-[#23430C]/60 text-[#BBE351]'
+                      }`}
                   >
                     {bp.icon}
                   </span>

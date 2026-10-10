@@ -42,28 +42,39 @@ const SERVICES: ServiceOffering[] = [
     buttonLabel: 'INQUIRE ABOUT FULL-STACK',
     description:
       'Turnkey end-to-end software development from database modeling to live cloud deployment, complete with secure authentication and third-party integrations.',
-    techTags: ['React', 'Node.js', 'PostgreSQL', 'Stripe', 'Docker'],
+    techTags: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'AI Integration'],
   },
   {
     number: '04',
-    index: 3,
-    id: 'mobile-web',
-    title: 'MOBILE & WEB APPLICATIONS',
-    buttonLabel: 'INQUIRE ABOUT MOBILE & WEB',
+    index: 1,
+    id: 'custom-software',
+    title: 'CUSTOM SOFTWARE APPLICATIONS',
+    buttonLabel: 'INQUIRE ABOUT CUSTOM SOFTWARE',
     description:
-      'From cross-platform mobile applications to responsive web apps, we craft touch-optimized digital experiences with zero layout shifts.',
-    techTags: ['React Native', 'Next.js', 'TypeScript', 'Expo', 'Tailwind'],
+      'Purpose-built software solutions engineered around your business needs, combining intelligent automation, tailored application architecture, and seamless system integrations to streamline operations and solve complex challenges.',
+    techTags: ['Python', 'C# / .NET', 'Flutter', 'Dart', 'PostgreSQL', 'AI Integration'],
   },
   {
     number: '05',
-    index: 4,
-    id: 'ai-integrations',
-    title: 'AI & INTELLIGENT SYSTEM INTEGRATIONS',
-    buttonLabel: 'INQUIRE ABOUT AI INTEGRATIONS',
+    index: 3,
+    id: 'mobile-web',
+    title: 'MOBILE APPLICATIONS',
+    buttonLabel: 'INQUIRE ABOUT MOBILE & WEB',
     description:
-      'We design and integrate intelligent systems—incorporating modern machine learning pipelines, LLMs, and automated workflow tools.',
-    techTags: ['Python', 'PyTorch', 'OpenAI API', 'LangChain', 'FastAPI'],
+      'Cross-platform mobile applications, we craft touch-optimized digital experiences with zero layout shifts.',
+    techTags: ['React Native', 'Expo','Firebase'],
   },
+
+  // {
+  //   number: '05',
+  //   index: 4,
+  //   id: 'ai-integrations',
+  //   title: 'AI & INTELLIGENT SYSTEM INTEGRATIONS',
+  //   buttonLabel: 'INQUIRE ABOUT AI INTEGRATIONS',
+  //   description:
+  //     'We design and integrate intelligent systems—incorporating modern machine learning pipelines, LLMs, and automated workflow tools.',
+  //   techTags: ['Python', 'PyTorch', 'OpenAI API', 'LangChain', 'FastAPI'],
+  // },
 ];
 
 // Floating particles for the animated background (fixed values so they never jump on re-render)
