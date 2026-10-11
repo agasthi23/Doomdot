@@ -10,13 +10,25 @@ const LIME = COLORS.primary;
 
 type Mouse = { x: number; y: number };
 
-export type Cue = 'hi' | 'hop' | 'spin' | 'nod' | 'look' | 'wiggle';
+// Added fun new acrobatic cues: 'flip', 'roll', 'cheer'
+export type Cue = 'hi' | 'hop' | 'spin' | 'nod' | 'look' | 'wiggle' | 'flip' | 'roll' | 'cheer';
 export type Brain = { wave: number; cue: Cue | null; moving: number };
 export type MouseRef = RefObject<Mouse>;
 
-const LENGTH: Record<Cue, number> = { hi: 1.9, hop: 0.9, spin: 1.3, nod: 1.1, look: 2.2, wiggle: 1.5 };
-const IDLE: Cue[] = ['hi', 'hop', 'spin', 'nod', 'look', 'wiggle'];
-const IDLE_EVERY = [5, 10];
+const LENGTH: Record<Cue, number> = {
+  hi: 1.9,
+  hop: 0.9,
+  spin: 1.3,
+  nod: 1.1,
+  look: 2.2,
+  wiggle: 1.5,
+  flip: 1.2,  // 360 Pitch Flip
+  roll: 1.1,  // Barrel Roll
+  cheer: 1.8, // Double-hand bounce wave
+};
+
+const IDLE: Cue[] = ['hi', 'hop', 'spin', 'nod', 'look', 'wiggle', 'flip', 'roll', 'cheer'];
+const IDLE_EVERY = [4, 8]; // Slightly more frequent fun idle tricks
 
 const bell = (u: number) => Math.min(1, u * 6, (1 - u) * 6);
 const smooth = (u: number) => u * u * (3 - 2 * u);
@@ -64,7 +76,9 @@ export default function Robot({ mouse, brain }: { mouse: MouseRef; brain: RefObj
 
     let jump = 0;
     let squash = 1;
-    let spin = 0;
+    let spin = 0; // Pitch/Yaw/Roll rotations
+    let flipX = 0;
+    let rollZ = 0;
     let tilt = 0;
     let nodX = 0;
     let lookY = 0;
@@ -102,15 +116,38 @@ export default function Robot({ mouse, brain }: { mouse: MouseRef; brain: RefObj
         tilt = Math.sin(u * Math.PI * 8) * 0.14 * bell(u);
         raiseL = raiseR = Math.max(raiseR, bell(u));
         break;
+
+      /* ============================================================== */
+      /* NEW TRICKS: FLIP, BARREL ROLL, CHEER WAVE                      */
+      /* ============================================================== */
+      case 'flip': // Full 360 degree front pitch flip
+        jump = 1.1 * Math.sin(u * Math.PI); // High acrobatic jump
+        flipX = -Math.PI * 2 * smooth(u);   // 360 forward rotation
+        raiseL = raiseR = Math.sin(u * Math.PI) * 0.8;
+        break;
+
+      case 'roll': // 360 Barrel roll on the Z axis
+        jump = 0.5 * Math.sin(u * Math.PI);
+        rollZ = Math.PI * 2 * smooth(u);
+        tilt = Math.sin(u * Math.PI * 2) * 0.2;
+        break;
+
+      case 'cheer': // Excited two-handed cheer bounce with wiggling arms
+        jump = 0.3 * Math.sin(u * Math.PI * 3);
+        raiseL = raiseR = 1.0;
+        tilt = Math.sin(u * Math.PI * 6) * 0.12;
+        break;
     }
 
     if (rig.current) {
       rig.current.position.y = 0.1 + jump;
+      rig.current.rotation.x = flipX;
       rig.current.rotation.y = spin;
-      rig.current.rotation.z = tilt;
+      rig.current.rotation.z = tilt + rollZ;
       const sxz = 1.3 / Math.sqrt(squash);
       rig.current.scale.set(sxz, 1.3 * squash, sxz);
     }
+
     if (head.current) {
       head.current.rotation.y = MathUtils.lerp(head.current.rotation.y, x * 0.5 + lookY, 0.1);
       head.current.rotation.x = MathUtils.lerp(head.current.rotation.x, -y * 0.3 + nodX, 0.15);

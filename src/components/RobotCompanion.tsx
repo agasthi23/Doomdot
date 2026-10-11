@@ -270,8 +270,11 @@ export default function RobotCompanion({
 
   useEffect(() => {
     const handlePointerMove = (event: PointerEvent) => {
-      mouse.current.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+
+      mouse.current.x = (event.clientX - centerX) / centerX;
+      mouse.current.y = -((event.clientY - centerY) / centerY);
     };
     const handleResize = () => setWide(window.innerWidth >= MIN_WIDTH);
 
@@ -298,7 +301,7 @@ export default function RobotCompanion({
         willChange: 'transform, opacity',
         position: 'fixed',
         inset: 0,
-        zIndex: stage === 'free' ? 10 : 101,
+        zIndex: stage === 'free' ? 50 : 101, // Raised z-index so it stays visible over team section cards
         pointerEvents: 'none',
       }}
     >
