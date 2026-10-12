@@ -22,7 +22,7 @@ export default function HeroText() {
           color: LIME,
         }}
       >
-        <span>[ 01 / CODE STREAM: ACTIVE ]</span>
+        <span>[ CODE STREAM: ACTIVE ]</span>
         <span>ENGINEERING THE NEXT DIGITAL ERA</span>
       </div>
 
@@ -91,8 +91,8 @@ export default function HeroText() {
         >
           Explore Team 
         </a>
-      </div>
 
+      </div>
       <div
         style={{
           marginTop: 44,
@@ -105,10 +105,9 @@ export default function HeroText() {
           gap: '6px 18px',
         }}
       >
-        <span>SCROLL TO EXPLORE ↓</span>
-        <span>//</span>
-        <span>FOUR MINDS. ONE MISSION.</span>
+        <span>SCROLL DOWN TO EXPLORE ↓</span>
       </div>
+
     </div>
   );
 }

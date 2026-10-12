@@ -17,6 +17,7 @@ import RobotCompanion from './components/RobotCompanion.tsx';
 import type { Stage } from './components/RobotCompanion.tsx';
 import { StatsSection } from './components/StatsSection.tsx';
 import { TechStackShowcase } from './components/TechStackShowcase.tsx';
+import WhyChooseUs from './components/WhyChooseUs.tsx';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'services-extended'>('home');
@@ -143,8 +144,10 @@ export default function App() {
             onSelectServiceAndContact={handleSelectServiceAndContact}
           />
 
-          {/* 3. About Us // Meet The 4-Person Engineering Team */}
+          {/* 3. About Us */}
           <SquadSection />
+
+          <WhyChooseUs />
 
           <TechStackShowcase />
 

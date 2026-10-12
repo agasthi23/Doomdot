@@ -97,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = () => {
             onClick={() => sound.playConfirm()}
             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-black bg-[#B8E351] hover:bg-[#d0f671] active:scale-[0.98] transition-all rounded-md shadow-[0_0_16px_rgba(184,227,81,0.5)] hover:shadow-[0_0_24px_rgba(184,227,81,0.8)] border border-[#c4eb63] whitespace-nowrap"
           >
-            <span>Hire Squad</span>
+            <span>Hire US</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
 

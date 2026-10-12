@@ -120,6 +120,24 @@ select.ct-input option { background: #0b110b; color: #fff; }
 .ct-send { display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; border: none; border-radius: 10px; padding: 0 22px; height: 44px; background: ${P}; color: #000; font-weight: 700; font-size: 14px; transition: transform .15s, opacity .2s; width: 100%; }
 .ct-send:hover:not(:disabled) { transform: translateY(-1px); }
 .ct-send:disabled { opacity: .65; cursor: default; }
+
+/* Status-pill style heading badge with a sparking dot */
+.ct-pill { display: inline-flex; align-items: center; gap: 12px; padding: 11px 22px; margin-bottom: 14px; border: 1px solid ${P}59; border-radius: 999px; background: rgba(8,12,6,0.88); box-shadow: inset 0 0 18px ${P}14, 0 0 26px -12px ${P}; font-family: ${MONO}; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: ${P}; white-space: nowrap; }
+.ct-pill-dot { position: relative; flex: none; width: 10px; height: 10px; border-radius: 50%; background: ${P}; box-shadow: 0 0 8px ${P}, 0 0 18px ${P}; animation: ct-spark 1.8s ease-in-out infinite; }
+.ct-pill-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; border: 1px solid ${P}; animation: ct-ring 1.8s ease-out infinite; }
+@keyframes ct-spark {
+  0%, 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 8px ${P}, 0 0 18px ${P}; }
+  45% { opacity: 0.55; transform: scale(0.82); box-shadow: 0 0 4px ${P}, 0 0 8px ${P}; }
+  60% { opacity: 1; transform: scale(1.12); box-shadow: 0 0 12px ${P}, 0 0 26px ${P}; }
+}
+@keyframes ct-ring {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(3.2); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ct-pill-dot, .ct-pill-dot::after { animation: none; }
+}
+@media (max-width: 420px) { .ct-pill { font-size: 11px; padding: 9px 16px; gap: 10px; } }
 `;
 
 export function ContactSection({
@@ -228,8 +246,9 @@ ${f.message}
           }}
         >
           <div>
-            <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: P, marginBottom: 8 }}>
-              04 /// GET IN TOUCH
+            <div className="ct-pill">
+              <span className="ct-pill-dot" aria-hidden="true" />
+              <span>GET IN TOUCH</span>
             </div>
             <h2
               style={{

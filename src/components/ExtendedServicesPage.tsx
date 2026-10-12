@@ -59,7 +59,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Dynamic viewport scaling for optimal mobile performance',
       'End-to-end component testing setup',
     ],
-    techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
+    techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite', 'Three.js'],
     slaTimeline: '3 - 10 Business Days',
     icon: <Code2 className="w-5 h-5" />,
   },
@@ -86,14 +86,14 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated database migration pipelines',
       'Robust error-handling middleware with structured logging',
     ],
-    techStack: ['Node.js', 'Python', 'PostgreSQL', 'Express', 'Docker', 'Redis'],
+    techStack: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Express', 'Docker', 'Redis'],
     slaTimeline: '5 - 12 Business Days',
     icon: <Server className="w-5 h-5" />,
   },
   {
     id: 'full-stack',
     number: '03',
-    category: 'END-TO-END PRODUCT ENGINEERING (TURNKEY MVPS)',
+    category: 'END-TO-END PRODUCT ENGINEERING',
     title: 'Full-Stack Web Applications',
     summary:
       'Turnkey end-to-end software development from database modeling to live cloud deployment, complete with secure authentication and third-party integrations.',
@@ -113,7 +113,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated CI/CD pipeline configuration for fast deployments',
       'Production-ready environment configurations',
     ],
-    techStack: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'Git'],
+    techStack: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'TypeScript', 'MongoDB'],
     slaTimeline: '7 - 14 Business Days',
     icon: <Layers className="w-5 h-5" />,
   },
@@ -144,7 +144,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated testing and version control workflows to support consistent software quality',
       'Platform-specific packaging and deployment configurations based on project requirements',
     ],
-    techStack: ['Python', 'C#', '.NET', 'Flutter', 'Dart', 'PostgreSQL', 'Git'],
+    techStack: ['Python', 'C#', '.NET', 'Java', 'PostgreSQL'],
     slaTimeline: 'Project-Based Timeline',
     icon: <Code2 className="w-5 h-5" />,
   },
@@ -171,7 +171,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Efficient state management for offline data syncing',
       'Clean native bridge configurations',
     ],
-    techStack: ['React Native', 'TypeScript', 'Expo', 'NativeWind'],
+    techStack: ['React Native', 'Expo', 'NativeWind', 'Firebase'],
     slaTimeline: '7 - 15 Business Days',
     icon: <Smartphone className="w-5 h-5" />,
   },
@@ -444,12 +444,6 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
 
             {/* Footer */}
             <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-xs font-mono text-white/60">
-                <Shield className="w-4 h-4 text-[#BBE351] shrink-0" />
-                <span>
-                  Full private GitHub repository ownership · Upwork / Fiverr escrow verified
-                </span>
-              </div>
 
               <div className="flex items-center gap-3">
                 <button
