@@ -18,7 +18,7 @@ type RobotTarget = { x: number; y: number; scale: number; visible: boolean };
 export type Stage = 'hidden' | 'intro' | 'free';
 
 export function RobotAnchor({
-  x = '85%',
+  x = '88%',
   y = '50%',
   scale = 0.5,
   perch,
@@ -103,9 +103,9 @@ function Mover({
         .filter((anchor): anchor is { x: number; y: number; scale: number } => !!anchor);
 
       let next = {
-        x: viewportWidth * 0.8,
-        y: viewportHeight * 0.4,
-        scale: 0.6,
+        x: viewportWidth * 0.90, // Positioned safely further right
+        y: viewportHeight * 0.35,
+        scale: 0.55,
       };
 
       if (perches.length > 0) {
@@ -120,8 +120,10 @@ function Mover({
 
       const unitsPerPixel =
         (2 * Math.tan(MathUtils.degToRad(45 / 2)) * 8) / viewportHeight;
-      const clampedX = Math.min(Math.max(next.x, viewportWidth * 0.18), viewportWidth * 0.82);
-      const clampedY = Math.min(Math.max(next.y, viewportHeight * 0.18), viewportHeight * 0.82);
+
+      // Pushed clamping bounds safely to the right margin to avoid blocking team cards
+      const clampedX = Math.min(Math.max(next.x, viewportWidth * 0.15), viewportWidth * 0.91);
+      const clampedY = Math.min(Math.max(next.y, viewportHeight * 0.12), viewportHeight * 0.82);
 
       const nextX = (clampedX - viewportWidth / 2) * unitsPerPixel;
       const nextY = -(clampedY - viewportHeight / 2) * unitsPerPixel;
@@ -301,7 +303,7 @@ export default function RobotCompanion({
         willChange: 'transform, opacity',
         position: 'fixed',
         inset: 0,
-        zIndex: stage === 'free' ? 50 : 101, // Raised z-index so it stays visible over team section cards
+        zIndex: stage === 'free' ? 30 : 101, // Positioned behind floating modals/cards if needed
         pointerEvents: 'none',
       }}
     >
