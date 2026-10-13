@@ -5,9 +5,10 @@ import { DoomLogo } from './DoomLogo.tsx';
 
 interface NavbarProps {
   onOpenTerminal?: () => void;
+  onNavigateHome?: (hash?: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = () => {
+export const Navbar: React.FC<NavbarProps> = ({ onNavigateHome }) => {
   const [isMuted, setIsMuted] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -21,17 +22,62 @@ export const Navbar: React.FC<NavbarProps> = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Intersection Observer to dynamically update URL hash as user scrolls through sections
+  useEffect(() => {
+    const sections = document.querySelectorAll('section[id], div[id]');
+    
+    const observerCallback: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.getAttribute('id');
+          if (id === 'about') {
+            // Remove hash completely when in the hero/top section
+            window.history.replaceState(null, '', window.location.pathname);
+          } else if (id && ['services', 'team', 'contact'].includes(id)) {
+            window.history.replaceState(null, '', `#${id}`);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.3,
+    });
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
+
   const toggleSound = () => {
     const next = sound.toggleMute();
     setIsMuted(next);
   };
 
   const navLinks = [
-    { label: 'Who We Are', href: '#about' },
+    { label: 'Home', href: '#' },
     { label: 'Services', href: '#services' },
     { label: 'The Team', href: '#team' },
     { label: 'Contact', href: '#contact' },
   ];
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    sound.playHover();
+    if (href === '#' || href === '#about') {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.history.replaceState(null, '', window.location.pathname);
+    } else if (href.startsWith('#')) {
+      e.preventDefault();
+      const targetElement = document.querySelector(href);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    if (onNavigateHome) {
+      onNavigateHome(href);
+    }
+  };
 
   return (
     <header
@@ -42,10 +88,10 @@ export const Navbar: React.FC<NavbarProps> = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Zone 1: Brand mark with official DoomDot glowing emblem & wordmark */}
+        {/* Brand mark */}
         <a
           href="#"
-          onClick={() => sound.playClick()}
+          onClick={(e) => handleNavClick(e, '#')}
           className="group flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351] rounded py-1"
           aria-label="DoomDot Web Development Startup - Home"
           title="DoomDot"
@@ -53,13 +99,13 @@ export const Navbar: React.FC<NavbarProps> = () => {
           <DoomLogo variant="lockup" size="sm" className="hover:scale-105 transition-transform" />
         </a>
 
-        {/* Zone 2: 4-6 clean text navigation links */}
+        {/* Navigation links */}
         <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-zinc-300">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              onClick={() => sound.playHover()}
+              onClick={(e) => handleNavClick(e, link.href)}
               className="hover:text-[#B8E351] transition-colors relative py-1 hover:underline underline-offset-4 decoration-[#B8E351]"
             >
               {link.label}
@@ -67,15 +113,14 @@ export const Navbar: React.FC<NavbarProps> = () => {
           ))}
         </nav>
 
-        {/* Zone 3: Actions - Audio Toggle + Location Pill + Hire CTA */}
+        {/* Actions */}
         <div className="flex items-center gap-3">
-          {/* Sound FX Toggle (Arcade Haptic Bleeps) */}
           <button
             type="button"
             onClick={toggleSound}
-            title={isMuted ? 'Turn Sound FX On (Arcade Haptics)' : 'Mute Sound FX'}
+            title={isMuted ? 'Turn Sound FX On' : 'Mute Sound FX'}
             className="p-2 text-zinc-400 hover:text-white bg-[#0e140a] hover:bg-[#16240d] border border-[#23430C] rounded-md transition-colors focus-visible:ring-2 focus-visible:ring-[#B8E351]"
-            aria-label={isMuted ? 'Enable tactical sound effects' : 'Mute tactical sound effects'}
+            aria-label={isMuted ? 'Enable sound effects' : 'Mute sound effects'}
           >
             {isMuted ? (
               <VolumeX className="w-4 h-4 text-zinc-500" />
@@ -84,24 +129,21 @@ export const Navbar: React.FC<NavbarProps> = () => {
             )}
           </button>
 
-          {/* Location Badge: Sri Lanka LK */}
           <div className="hidden lg:inline-flex items-center gap-2 px-3 py-1.5 bg-[#0e140a]/80 border border-[#23430C] rounded-full text-xs font-mono text-zinc-300 shadow-inner">
             <span className="w-2 h-2 rounded-full bg-[#B8E351] animate-pulse" />
             <span>Sri Lanka</span>
             <span className="text-[10px] text-zinc-500 font-semibold tracking-wider">LK</span>
           </div>
 
-          {/* Primary Action Button: Glowing Cyber Lime Button */}
           <a
             href="#contact"
-            onClick={() => sound.playConfirm()}
+            onClick={(e) => handleNavClick(e, '#contact')}
             className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold uppercase tracking-wider text-black bg-[#B8E351] hover:bg-[#d0f671] active:scale-[0.98] transition-all rounded-md shadow-[0_0_16px_rgba(184,227,81,0.5)] hover:shadow-[0_0_24px_rgba(184,227,81,0.8)] border border-[#c4eb63] whitespace-nowrap"
           >
-            <span>Hire Squad</span>
+            <span>Hire US</span>
             <ArrowUpRight className="w-3.5 h-3.5" />
           </a>
 
-          {/* Mobile hamburger */}
           <button
             type="button"
             onClick={() => {
@@ -124,9 +166,9 @@ export const Navbar: React.FC<NavbarProps> = () => {
               <a
                 key={link.label}
                 href={link.href}
-                onClick={() => {
-                  sound.playClick();
+                onClick={(e) => {
                   setMobileMenuOpen(false);
+                  handleNavClick(e, link.href);
                 }}
                 className="text-zinc-300 hover:text-[#B8E351] py-1 border-b border-zinc-800/40"
               >

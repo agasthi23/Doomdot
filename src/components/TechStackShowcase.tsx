@@ -88,6 +88,17 @@ const TECHS: Tech[] = [
     url: 'https://vite.dev',
   },
   {
+    id: 'threejs',
+    name: 'Three.js',
+    kind: '3D Library',
+    tagline: '3D graphics in the browser',
+    description:
+      'Three.js lets us build interactive 3D scenes and visual effects that run right in the browser, with smooth GPU-powered rendering.',
+    tags: ['3D Web'],
+    image: '/tech/threejs.svg',
+    url: 'https://threejs.org',
+  },
+  {
     id: 'nodejs',
     name: 'Node.js',
     kind: 'Runtime',
@@ -110,6 +121,28 @@ const TECHS: Tech[] = [
     url: 'https://www.python.org',
   },
   {
+    id: 'csharp',
+    name: 'C#',
+    kind: 'Language',
+    tagline: 'Modern language for solid software',
+    description:
+      'C# is a clean, strongly typed language. We use it to build reliable desktop apps and business systems, often together with .NET.',
+    tags: ['Desktop', 'Custom Software'],
+    image: '/tech/csharp.svg',
+    url: 'https://learn.microsoft.com/dotnet/csharp/',
+  },
+  {
+    id: 'java',
+    name: 'Java',
+    kind: 'Language',
+    tagline: 'Trusted for large, stable systems',
+    description:
+      'Java is a mature, dependable language. We use it for custom business software that must run reliably and be easy to maintain for years.',
+    tags: ['Custom Software', 'Backend'],
+    image: '/tech/java.svg',
+    url: 'https://www.java.com',
+  },
+  {
     id: 'postgresql',
     name: 'PostgreSQL',
     kind: 'Database',
@@ -121,6 +154,17 @@ const TECHS: Tech[] = [
     url: 'https://www.postgresql.org',
   },
   {
+    id: 'mongodb',
+    name: 'MongoDB',
+    kind: 'Database',
+    tagline: 'Flexible document database',
+    description:
+      'MongoDB stores data as flexible documents, which is a great fit for fast-changing products. We pair it with Node.js for quick, scalable apps.',
+    tags: ['NoSQL'],
+    image: '/tech/mongodb.svg',
+    url: 'https://www.mongodb.com',
+  },
+  {
     id: 'express',
     name: 'Express',
     kind: 'Framework',
@@ -130,6 +174,17 @@ const TECHS: Tech[] = [
     tags: ['Backend', 'REST APIs'],
     image: '/tech/express.svg',
     url: 'https://expressjs.com',
+  },
+  {
+    id: 'mern',
+    name: 'MERN Stack',
+    kind: 'Full-Stack',
+    tagline: 'MongoDB, Express, React, Node.js',
+    description:
+      'The MERN stack uses JavaScript from the database to the browser. It lets us build and ship complete web apps quickly with one language.',
+    tags: ['Web Apps'],
+    image: '/tech/mern.svg',
+    url: 'https://www.mongodb.com/mern-stack',
   },
   {
     id: 'docker',
@@ -196,6 +251,28 @@ const TECHS: Tech[] = [
     tags: ['Tooling'],
     image: '/tech/expo.svg',
     url: 'https://expo.dev',
+  },
+  {
+    id: 'nativewind',
+    name: 'NativeWind',
+    kind: 'Styling',
+    tagline: 'Tailwind CSS for React Native',
+    description:
+      'NativeWind brings Tailwind-style classes to mobile apps, so our web and mobile screens share the same design language.',
+    tags: ['Mobile'],
+    image: '/tech/nativewind.png',
+    url: 'https://www.nativewind.dev',
+  },
+  {
+    id: 'firebase',
+    name: 'Firebase',
+    kind: 'Backend Service',
+    tagline: 'Ready-made backend for apps',
+    description:
+      'Firebase gives mobile and web apps login, a real-time database, cloud storage and push notifications without running our own servers.',
+    tags: ['Mobile', 'Cloud'],
+    image: '/tech/firebase.svg',
+    url: 'https://firebase.google.com',
   },
   {
     id: 'pytorch',

@@ -14,10 +14,11 @@ import {
 } from 'lucide-react';
 import { sound } from '../utils/audio.ts';
 import { DoomLogo } from './DoomLogo.tsx';
+import { Navbar } from './Navbar.tsx';
 
 interface ExtendedServicesPageProps {
   initialServiceId?: string;
-  onBackToHome: () => void;
+  onBackToHome: (targetHash?: string) => void;
   onSelectServiceAndContact: (serviceName: string) => void;
 }
 
@@ -59,7 +60,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Dynamic viewport scaling for optimal mobile performance',
       'End-to-end component testing setup',
     ],
-    techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite'],
+    techStack: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite', 'Three.js'],
     slaTimeline: '3 - 10 Business Days',
     icon: <Code2 className="w-5 h-5" />,
   },
@@ -86,14 +87,14 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated database migration pipelines',
       'Robust error-handling middleware with structured logging',
     ],
-    techStack: ['Node.js', 'Python', 'PostgreSQL', 'Express', 'Docker', 'Redis'],
+    techStack: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Express', 'Docker', 'Redis'],
     slaTimeline: '5 - 12 Business Days',
     icon: <Server className="w-5 h-5" />,
   },
   {
     id: 'full-stack',
     number: '03',
-    category: 'END-TO-END PRODUCT ENGINEERING (TURNKEY MVPS)',
+    category: 'END-TO-END PRODUCT ENGINEERING',
     title: 'Full-Stack Web Applications',
     summary:
       'Turnkey end-to-end software development from database modeling to live cloud deployment, complete with secure authentication and third-party integrations.',
@@ -113,7 +114,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated CI/CD pipeline configuration for fast deployments',
       'Production-ready environment configurations',
     ],
-    techStack: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'Git'],
+    techStack: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'TypeScript', 'MongoDB'],
     slaTimeline: '7 - 14 Business Days',
     icon: <Layers className="w-5 h-5" />,
   },
@@ -144,7 +145,7 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Automated testing and version control workflows to support consistent software quality',
       'Platform-specific packaging and deployment configurations based on project requirements',
     ],
-    techStack: ['Python', 'C#', '.NET', 'Flutter', 'Dart', 'PostgreSQL', 'Git'],
+    techStack: ['Python', 'C#', '.NET', 'Java', 'PostgreSQL'],
     slaTimeline: 'Project-Based Timeline',
     icon: <Code2 className="w-5 h-5" />,
   },
@@ -171,37 +172,10 @@ const BLUEPRINTS: ServiceBlueprint[] = [
       'Efficient state management for offline data syncing',
       'Clean native bridge configurations',
     ],
-    techStack: ['React Native', 'TypeScript', 'Expo', 'NativeWind'],
+    techStack: ['React Native', 'Expo', 'NativeWind', 'Firebase'],
     slaTimeline: '7 - 15 Business Days',
     icon: <Smartphone className="w-5 h-5" />,
   },
-  // {
-  //   id: 'ai-integrations',
-  //   number: '05',
-  //   category: 'MACHINE LEARNING & LLM AUTOMATION',
-  //   title: 'AI & Intelligent System Integrations',
-  //   summary:
-  //     'We design and integrate intelligent systems—incorporating modern machine learning pipelines, LLMs, and automated workflow tools.',
-  //   overview:
-  //     'We build and integrate next-generation intelligent capabilities into your software ecosystem. From custom data processing pipelines and vector search configurations to advanced LLM-powered workflows, we make your product smart.',
-  //   deliverables: [
-  //     'Custom AI model and LLM API integrations (OpenAI, Anthropic, local models)',
-  //     'Vector database setup and semantic search implementation (Pinecone, Chroma)',
-  //     'Automated data preprocessing and ingestion pipelines',
-  //     'Prompt engineering frameworks and agentic workflow structures',
-  //     'High-performance FastAPI microservices for AI task handling',
-  //     'Secure API key management and token usage monitoring',
-  //   ],
-  //   architectureDetails: [
-  //     'Optimized context window management to minimize latency and costs',
-  //     'Robust fallback handling for API rate limits and downtime',
-  //     'Secure handling of proprietary user data and privacy compliance',
-  //     'Asynchronous background processing for long-running AI tasks',
-  //   ],
-  //   techStack: ['Python', 'PyTorch', 'OpenAI API', 'LangChain', 'FastAPI', 'Vector DBs'],
-  //   slaTimeline: '5 - 12 Business Days',
-  //   icon: <Cpu className="w-5 h-5" />,
-  // },
 ];
 
 export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
@@ -215,7 +189,6 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Keep the selected tab in sync if the page is opened with a different service
   useEffect(() => {
     setSelectedServiceId(initialServiceId);
   }, [initialServiceId]);
@@ -229,33 +202,34 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#050607] text-white selection:bg-[#BBE351] selection:text-[#050607] py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#050607] text-white selection:bg-[#BBE351] selection:text-[#050607] pb-8 pt-24 px-4 sm:px-6 lg:px-8">
+      {/* ================= FIXED NAVBAR ================= */}
+      <Navbar onNavigateHome={(hash) => onBackToHome(hash)} />
+
       <div className="max-w-7xl mx-auto">
         {/* ================= TOP HEADER BAR ================= */}
         <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-12">
+          {/* Arrow-only Back Button */}
           <button
             type="button"
             onClick={() => {
               sound.playClick();
               onBackToHome();
             }}
-            className="px-4 py-2 rounded-lg border border-white/15 hover:border-[#BBE351] text-xs font-mono text-white/80 hover:text-white transition-colors flex items-center gap-2 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351]"
+            aria-label="Return to Home"
+            title="Return to Home"
+            className="p-2.5 rounded-lg border border-white/15 hover:border-[#BBE351] text-white/80 hover:text-white transition-colors flex items-center justify-center cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351]"
           >
-            <ArrowLeft className="w-4 h-4 text-[#BBE351] group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Home</span>
+            <ArrowLeft className="w-5 h-5 text-[#BBE351] group-hover:-translate-x-0.5 transition-transform" />
           </button>
 
           <div className="flex items-center gap-3">
             <DoomLogo variant="lockup" size="sm" />
-            {/* <span className="hidden sm:inline text-xs font-mono text-white/50">
-              /// DETAILED SERVICES SPECIFICATION
-            </span> */}
           </div>
         </div>
 
         {/* ================= HERO TITLE ================= */}
         <div className="mb-12 text-left space-y-5">
-          {/* Status badge with live dot */}
           <div className="inline-flex flex-wrap items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-[#23430C] bg-[#23430C]/30 text-xs font-mono text-[#BBE351]">
             <span className="relative flex h-2 w-2" aria-hidden="true">
               <span className="absolute inline-flex h-full w-full rounded-full bg-[#BBE351] opacity-75 animate-ping motion-reduce:animate-none" />
@@ -297,21 +271,26 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
                   sound.playClick();
                   setSelectedServiceId(bp.id);
                 }}
-                className={`relative p-4 rounded-xl border text-left transition-colors duration-200 cursor-pointer flex flex-col justify-between gap-4 min-h-[112px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351] ${isActive
-                  ? 'bg-[#23430C]/40 border-[#BBE351]'
-                  : 'bg-white/[0.02] border-white/10 hover:border-[#BBE351]/50 hover:bg-white/[0.04]'
-                  }`}
+                className={`relative p-4 rounded-xl border text-left transition-colors duration-200 cursor-pointer flex flex-col justify-between gap-4 min-h-[112px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#BBE351] ${
+                  isActive
+                    ? 'bg-[#23430C]/40 border-[#BBE351]'
+                    : 'bg-white/[0.02] border-white/10 hover:border-[#BBE351]/50 hover:bg-white/[0.04]'
+                }`}
               >
                 <div className="flex items-center justify-between">
                   <span
-                    className={`text-xs font-mono font-bold ${isActive ? 'text-[#BBE351]' : 'text-white/50'
-                      }`}
+                    className={`text-xs font-mono font-bold ${
+                      isActive ? 'text-[#BBE351]' : 'text-white/50'
+                    }`}
                   >
                     {bp.number}
                   </span>
                   <span
-                    className={`w-9 h-9 rounded-lg flex items-center justify-center ${isActive ? 'bg-[#BBE351] text-[#050607]' : 'bg-[#23430C]/60 text-[#BBE351]'
-                      }`}
+                    className={`w-9 h-9 rounded-lg flex items-center justify-center ${
+                      isActive
+                        ? 'bg-[#BBE351] text-[#050607]'
+                        : 'bg-[#23430C]/60 text-[#BBE351]'
+                    }`}
                   >
                     {bp.icon}
                   </span>
@@ -326,11 +305,10 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
 
         {/* ================= ACTIVE SERVICE CARD ================= */}
         <div className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden text-left">
-          {/* Thin accent line on top */}
           <div aria-hidden="true" className="h-1 w-full bg-[#BBE351]" />
 
           <div className="p-6 sm:p-10 space-y-12">
-            {/* Top banner: number, category, title, summary, SLA, button */}
+            {/* Top banner (Book Service button removed)[cite: 8] */}
             <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 pb-10 border-b border-white/10">
               <div className="space-y-4 max-w-3xl">
                 <div className="flex flex-wrap items-center gap-3">
@@ -361,15 +339,6 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
                     <strong className="text-white font-bold">{activeBlueprint.slaTimeline}</strong>
                   </div>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => handleHireClick(activeBlueprint.title)}
-                  className="px-6 py-3 rounded-xl bg-[#BBE351] hover:bg-[#BBE351]/90 text-[#050607] font-bold text-xs font-mono uppercase tracking-wider transition-colors flex items-center justify-center gap-2 cursor-pointer active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                >
-                  <span>Book This Service</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
               </div>
             </div>
 
@@ -444,13 +413,6 @@ export const ExtendedServicesPage: React.FC<ExtendedServicesPageProps> = ({
 
             {/* Footer */}
             <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-2 text-xs font-mono text-white/60">
-                <Shield className="w-4 h-4 text-[#BBE351] shrink-0" />
-                <span>
-                  Full private GitHub repository ownership · Upwork / Fiverr escrow verified
-                </span>
-              </div>
-
               <div className="flex items-center gap-3">
                 <button
                   type="button"

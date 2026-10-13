@@ -22,7 +22,7 @@ const SERVICES: ServiceOffering[] = [
     buttonLabel: 'INQUIRE ABOUT FRONT-END',
     description:
       'We engineer immersive, pixel-perfect, and high-performance user interfaces optimized for speed, accessibility, and fluid user experiences across all devices.',
-    techTags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion'],
+    techTags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'Vite', 'Three.js'],
   },
   {
     number: '02',
@@ -32,7 +32,7 @@ const SERVICES: ServiceOffering[] = [
     buttonLabel: 'INQUIRE ABOUT BACK-END',
     description:
       'We build robust, secure server-side architectures and high-concurrency APIs designed to handle complex business logic reliably.',
-    techTags: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Express', 'Docker'],
+    techTags: ['Node.js', 'Python', 'PostgreSQL', 'MongoDB', 'Express', 'Docker', 'Redis'],
   },
   {
     number: '03',
@@ -42,7 +42,7 @@ const SERVICES: ServiceOffering[] = [
     buttonLabel: 'INQUIRE ABOUT FULL-STACK',
     description:
       'Turnkey end-to-end software development from database modeling to live cloud deployment, complete with secure authentication and third-party integrations.',
-    techTags: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'AI Integration'],
+    techTags: ['MERN Stack', 'PostgreSQL', 'Stripe', 'Docker', 'Tailwind CSS', 'Next.js', 'TypeScript', 'MongoDB', 'AI Integration'],
   },
   {
     number: '04',
@@ -52,7 +52,7 @@ const SERVICES: ServiceOffering[] = [
     buttonLabel: 'INQUIRE ABOUT CUSTOM SOFTWARE',
     description:
       'Purpose-built software solutions engineered around your business needs, combining intelligent automation, tailored application architecture, and seamless system integrations to streamline operations and solve complex challenges.',
-    techTags: ['Python', 'C# / .NET', 'Flutter', 'Dart', 'PostgreSQL', 'AI Integration'],
+    techTags: ['Python', 'C# / .NET', 'Java', 'PostgreSQL', 'AI Integration'],
   },
   {
     number: '05',
@@ -62,7 +62,7 @@ const SERVICES: ServiceOffering[] = [
     buttonLabel: 'INQUIRE ABOUT MOBILE & WEB',
     description:
       'Cross-platform mobile applications, we craft touch-optimized digital experiences with zero layout shifts.',
-    techTags: ['React Native', 'Expo','Firebase'],
+    techTags: ['React Native', 'Expo','Firebase' ,'NativeWind', 'AI Integration'],
   },
 
   // {

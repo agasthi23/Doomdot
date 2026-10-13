@@ -5,12 +5,11 @@ import {
   ArrowRight,
   LayoutGrid,
   Sparkles,
-  ShieldCheck,
   Github,
   Linkedin,
-  Zap,
-  GitBranch,
-  Clock,
+  Rocket,
+  Lock,
+  Bell,
 } from 'lucide-react';
 import { sound } from '../utils/audio.ts';
 import { DoomLogo } from './DoomLogo.tsx';
@@ -25,7 +24,11 @@ interface TeamMember {
   discipline: 'SE' | 'CS';
   degree: string;
   initials: string;
+  /** Shown in the "Focus" row: the founder's main services from the Services page. */
   tagline: string;
+  /** Short description shown in the "About" row. */
+  bio: string;
+  /** Tech tags matching the Focus services. */
   specialties: string[];
   github: string;
   linkedin: string;
@@ -45,8 +48,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'SE',
     degree: 'B.Sc. Software Engineering',
     initials: 'AS',
-    tagline: 'Modern Web Architectures & Client Systems',
-    specialties: ['TypeScript', 'Next.js 15', 'React 19', 'PostgreSQL', 'Tailwind'],
+    tagline: 'Front-End Development & UI/UX · Full-Stack Web Applications · Custom Software Applications',
+    bio: 'Co-Founder of DoomDot, responsible for front-end development and user interface design, with a focus on delivering polished and high-performing digital products.',
+    specialties: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'C#', '.NET', 'Java',],
     github: 'https://github.com/agasthi23',
     linkedin: 'https://www.linkedin.com/in/agasthi-i-silva/',
     tint: '#B8E351',
@@ -62,8 +66,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'SE',
     degree: 'B.Sc. Software Engineering',
     initials: 'GR',
-    tagline: 'Distributed Systems & Scalable Cloud APIs',
-    specialties: ['Go', 'Node.js', 'PostgreSQL', 'Redis', 'Docker'],
+    tagline: 'Back-End Engineering & Scalable APIs · Full-Stack Web Applications · Mobile Applications',
+    bio: 'Co-Founder of DoomDot, responsible for back-end architecture and API development, ensuring that developing systems remain secure, reliable, and scalable.',
+    specialties: ['Node.js', 'Express', 'MongoDB', 'Redis', 'Docker', 'TypeScript', 'NativeWind', 'Next.js'],
     github: 'https://github.com/GavinRanasinghe29870',
     linkedin: 'https://www.linkedin.com/in/gavin-ranasinghe-585183323/',
     tint: '#6EE7A8',
@@ -79,8 +84,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'CS',
     degree: 'B.Sc. Computer Science',
     initials: 'TS',
-    tagline: 'Intelligent Workflows & Machine Algorithms',
-    specialties: ['Python', 'FastAPI', 'Gemini API', 'Qdrant'],
+    tagline: 'Custom Software Applications · Back-End Engineering & Scalable APIs · Mobile Applications',
+    bio: 'Co-Founder of DoomDot, responsible for custom software development, applying strong problem-solving skills to build dependable, business-focused solutions.',
+    specialties: ['Python', 'C#', '.NET', 'Java', 'PostgreSQL', 'Docker', 'NativeWind'],
     github: 'https://github.com/Thamindu3',
     linkedin: 'https://www.linkedin.com/in/thamindu-samarathunga-29546a26b',
     tint: '#5EEAD4',
@@ -96,43 +102,13 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'CS',
     degree: 'B.Sc. Computer Science',
     initials: 'OR',
-    tagline: 'Platform Security & Interactive 3D WebGL',
-    specialties: ['OAuth 2.0', 'Three.js', 'Webhooks', 'React'],
+    tagline: 'Full-Stack Web Applications · Mobile Applications · Front-End Development & UI/UX',
+    bio: 'Co-Founder of DoomDot, responsible for full-stack web and mobile development, overseeing projects from initial planning through to final delivery.',
+    specialties: ['React', 'Node.js', 'MongoDB', 'Stripe', 'React Native', 'Expo', 'NativeWind'],
     github: 'https://github.com/odishaa',
     linkedin: 'https://www.linkedin.com/in/odisha-rathnayake-rm2002/',
     tint: '#E4FF7A',
     photo: '/team/odisha.png',
-  },
-];
-
-const WHY_CHOOSE_US = [
-  {
-    icon: <Zap className="w-5 h-5 text-[#B8E351]" />,
-    title: 'Direct Engineer Access (Zero Middlemen)',
-    description:
-      'You collaborate directly with the 4 co-founders who write every line of code. No sales reps, account managers, or outsourced junior developers. Daily updates via Discord or Slack.',
-    stat: '100% DIRECT DEV ACCESS',
-  },
-  {
-    icon: <Clock className="w-5 h-5 text-[#B8E351]" />,
-    title: 'High-Velocity Sprints with 30-Day Warranty',
-    description:
-      'We ship production code in focused weekly milestones. Every completed project includes 30 days of complimentary bug fixes, performance monitoring, and live SLA support.',
-    stat: '30-DAY WARRANTY INCLUDED',
-  },
-  {
-    icon: <GitBranch className="w-5 h-5 text-[#B8E351]" />,
-    title: '100% Code & Intellectual Property Ownership',
-    description:
-      'Private GitHub repository handover from day one. Clean, type-safe, fully documented code with complete commercial copyright and zero vendor lock-in.',
-    stat: 'FULL IP HANDOVER',
-  },
-  {
-    icon: <ShieldCheck className="w-5 h-5 text-[#B8E351]" />,
-    title: 'Software Engineering + Computer Science Rigor',
-    description:
-      'Our team combines modern software architecture with computer science algorithm design and security hardening. Systems engineered for sub-30ms latencies and zero vulnerabilities.',
-    stat: 'SE + CS DEGREES COMBINED',
   },
 ];
 
@@ -384,208 +360,180 @@ const TeamBackdrop: React.FC = () => (
 );
 
 /* ------------------------------------------------------------------ */
-/* Why Choose Us (circular layout + expandable pills)                  */
+/* Marketplace "Coming Soon" banner                                    */
 /* ------------------------------------------------------------------ */
 
-// px push to the right on desktop. All 0 = clean aligned column.
-// Want the arc look again? use [0, 56, 56, 0]
-const PILL_OFFSETS = [0, 0, 0, 0];
+const MARKET_CSS = `
+  @keyframes mkShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(300%); }
+  }
+  @keyframes mkBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+  @keyframes mkFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes mkSweep {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+  .mk-shimmer { animation: mkShimmer 2.2s ease-in-out infinite; }
+  .mk-blink { animation: mkBlink 1.2s steps(2, start) infinite; }
+  .mk-float { animation: mkFloat 4s ease-in-out infinite; }
+  .mk-sweep { animation: mkSweep 4.5s linear infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .mk-shimmer, .mk-blink, .mk-float, .mk-sweep { animation: none; }
+  }
+`;
 
-const WhyChooseUs: React.FC = () => {
-  const reduced = prefersReducedMotion();
-  const isDesktop = useMediaQuery('(min-width: 1024px)');
-  const [ref, inView] = useInView<HTMLDivElement>(0.15);
-  const [active, setActive] = useState<number | null>(0); // null = all closed at start
+const PLATFORMS = [
+  {
+    name: 'Upwork',
+    blurb: 'Big ideas, built to last. Full-stack products and long-term partnerships.',
+    status: 'Profile in review',
+    progress: 85,
+    tint: '#B8E351',
+  },
+  {
+    name: 'Fiverr',
+    blurb: 'Small brief, big impact. Quick builds, clean fixes and fast delivery.',
+    status: 'Gigs being drafted',
+    progress: 70,
+    tint: '#6EE7A8',
+  },
+];
 
-  const toggle = (i: number) => {
-    sound.playClick();
-    setActive((cur) => (cur === i ? null : i));
-  };
+const MarketplaceSoon: React.FC = () => {
+  const [ref, inView] = useInView<HTMLDivElement>(0.25);
 
   return (
     <div
       ref={ref}
-      className="grid lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] gap-12 lg:gap-14 items-center"
+      className="relative rounded-2xl border border-[#23430C] bg-[#070b04]/80 overflow-hidden p-6 sm:p-10 text-left shadow-[0_0_50px_rgba(184,227,81,0.07)]"
     >
-      <style>{`
-        @keyframes wcuCore {
-          0%, 100% {
-            box-shadow: 0 0 18px rgba(184,227,81,0.12), inset 0 0 18px rgba(184,227,81,0.05);
-            border-color: rgba(184,227,81,0.35);
-          }
-          50% {
-            box-shadow: 0 0 55px rgba(184,227,81,0.5), inset 0 0 35px rgba(184,227,81,0.15);
-            border-color: rgba(184,227,81,0.95);
-          }
-        }
-        @keyframes wcuGlow {
-          0%, 100% { opacity: 0.55; }
-          50% { opacity: 1; }
-        }
-        @keyframes wcuRipple {
-          0% { transform: scale(1); opacity: 0.6; }
-          100% { transform: scale(1.55); opacity: 0; }
-        }
-        @keyframes wcuBlink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.2; }
-        }
-        .wcu-core { animation: wcuCore 2.8s ease-in-out infinite; }
-        .wcu-glow { animation: wcuGlow 2.8s ease-in-out infinite; }
-        .wcu-ripple { animation: wcuRipple 3.2s ease-out infinite; }
-        .wcu-blink { animation: wcuBlink 1.4s ease-in-out infinite; }
-        @media (prefers-reduced-motion: reduce) {
-          .wcu-core, .wcu-glow, .wcu-ripple, .wcu-blink { animation: none; }
-        }
-      `}</style>
+      <style>{MARKET_CSS}</style>
 
-      {/* ---------------- LEFT: circle ---------------- */}
-      <div
-        className="relative mx-auto w-full max-w-[290px] sm:max-w-[420px] aspect-square"
-        style={{
-          opacity: inView ? 1 : 0,
-          transform: inView ? 'scale(1)' : 'scale(0.8)',
-          transition: reduced ? 'none' : `opacity 800ms ease, transform 900ms ${EASE}`,
-        }}
-      >
-        <div aria-hidden="true" className="wcu-ripple absolute inset-[14%] rounded-full border border-[#B8E351]/60" />
+      {/* background glow + scan line */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div
-          aria-hidden="true"
-          className="wcu-ripple absolute inset-[14%] rounded-full border border-[#B8E351]/60"
-          style={{ animationDelay: '1.6s' }}
+          className="absolute -top-24 left-1/2 -translate-x-1/2 w-[520px] h-[260px] rounded-full"
+          style={{ background: 'radial-gradient(circle, rgba(184,227,81,0.16), transparent 70%)' }}
         />
         <div
-          aria-hidden="true"
-          className="absolute -inset-6 rounded-full border border-dashed border-[#B8E351]/25 animate-spin motion-reduce:animate-none"
-          style={{ animationDuration: '60s' }}
+          className="absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(0deg, #B8E351 0, #B8E351 1px, transparent 1px, transparent 7px)',
+          }}
         />
-        <div aria-hidden="true" className="absolute -inset-1 rounded-full border border-[#23430C]" />
-        <div
-          aria-hidden="true"
-          className="wcu-glow absolute inset-3 rounded-full bg-gradient-to-br from-[#14260a] via-[#0b1507] to-[#050607] border border-[#B8E351]/20 shadow-[0_0_60px_rgba(184,227,81,0.12)]"
-        />
-
-        <div className="wcu-core absolute inset-[14%] rounded-full bg-[#070b04] border border-[#B8E351]/40 flex flex-col items-center justify-center text-center px-6 sm:px-10">
-          <span className="text-[9px] sm:text-[10px] font-mono font-bold tracking-[0.2em] text-[#B8E351]">
-            CORE ADVANTAGE
-          </span>
-          <h3 className="mt-2 text-xl sm:text-3xl font-extrabold font-display text-white leading-tight tracking-tight">
-            Why You Need To Choose Us<span className="wcu-blink text-[#B8E351]">?</span>
-          </h3>
-          <a
-            href="#contact"
-            onClick={() => sound.playConfirm()}
-            className="mt-4 sm:mt-5 px-4 py-2 rounded-lg bg-[#B8E351] hover:bg-[#d0f671] text-black font-bold text-[10px] font-mono uppercase tracking-wider shadow-[0_0_15px_rgba(184,227,81,0.4)] transition-all active:scale-95"
-          >
-            Let&apos;s work with us
-          </a>
-        </div>
+        <div className="mk-sweep absolute inset-x-0 h-24 bg-gradient-to-b from-transparent via-[#B8E351]/10 to-transparent" />
       </div>
 
-      {/* ---------------- RIGHT: expandable pills ---------------- */}
-      <div className="relative flex flex-col justify-center lg:min-h-[480px]">
-        <div className="space-y-4">
-          {WHY_CHOOSE_US.map((item, idx) => {
-            const open = active === idx;
-            const delay = 250 + idx * 120;
+      <div className="relative">
+        {/* status line */}
+        <div className="flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#B8E351]/40 bg-[#050607]/70 text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-[0.12em] text-[#B8E351]">
+            <Rocket className="w-3.5 h-3.5 mk-float" />
+            <span>Incoming Transmission</span>
+            <span className="mk-blink">_</span>
+          </div>
 
-            return (
+          <h4 className="mt-5 font-display font-black uppercase tracking-tight leading-[0.95] text-white text-3xl sm:text-5xl">
+            We&apos;re Landing On
+            <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#B8E351] to-[#e4ff9a]">
+              Upwork &amp; Fiverr
+            </span>
+          </h4>
+
+          <p className="mt-4 max-w-2xl text-xs sm:text-sm text-zinc-400 font-sans leading-relaxed">
+            Same quality, same 100% code &amp; IP handover, now on the marketplaces you already
+            trust. Our profiles are being built right now. Launching soon.
+          </p>
+        </div>
+
+        {/* platform cards */}
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {PLATFORMS.map((p, i) => (
+            <div
+              key={p.name}
+              style={{
+                opacity: inView ? 1 : 0,
+                transform: inView ? 'translateY(0)' : 'translateY(24px)',
+                transition: `opacity 700ms ${EASE} ${i * 150}ms, transform 700ms ${EASE} ${i * 150}ms`,
+              }}
+            >
               <div
-                key={item.title}
-                style={{
-                  marginLeft: isDesktop ? PILL_OFFSETS[idx] : 0,
-                  opacity: inView ? 1 : 0,
-                  transform: inView ? 'translateX(0)' : 'translateX(48px)',
-                  transition: reduced
-                    ? 'none'
-                    : `opacity 700ms ease ${delay}ms, transform 800ms ${EASE} ${delay}ms`,
-                }}
+                className="group relative rounded-xl border border-dashed bg-[#030602]/80 p-5 sm:p-6 hover:-translate-y-1 transition-transform duration-500"
+                style={{ borderColor: `${p.tint}66` }}
               >
-                <div
-                  className={`rounded-[28px] border transition-all duration-500 ${
-                    open
-                      ? 'border-[#B8E351] bg-[#0c1707] shadow-[0_0_28px_rgba(184,227,81,0.18)]'
-                      : 'border-[#23430C] bg-[#070b04]/90 hover:border-[#B8E351]/70'
-                  }`}
-                >
-                  <button
-                    type="button"
-                    onClick={() => toggle(idx)}
-                    onMouseEnter={() => !open && sound.playHover()}
-                    aria-expanded={open}
-                    aria-controls={`why-panel-${idx}`}
-                    className="w-full flex items-center gap-4 p-2.5 pr-5 text-left rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351]"
-                  >
-                    <span
-                      className={`shrink-0 w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 ${
-                        open
-                          ? 'bg-[#B8E351] border-[#B8E351] scale-105 [&_svg]:text-black'
-                          : 'bg-[#0e1c09] border-[#23430C]'
-                      }`}
-                    >
-                      {item.icon}
-                    </span>
-                    <span
-                      className={`flex-1 font-display font-bold text-sm sm:text-base leading-snug transition-colors duration-300 ${
-                        open ? 'text-[#B8E351]' : 'text-white'
-                      }`}
-                    >
-                      {item.title}
-                    </span>
-                    <ArrowRight
-                      className={`w-4 h-4 shrink-0 transition-transform duration-500 ${
-                        open ? 'rotate-90 text-[#B8E351]' : 'text-zinc-500'
-                      }`}
-                    />
-                  </button>
+                {/* SOON badge */}
+                <div className="absolute top-4 right-4 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#B8E351] text-black text-[9px] font-mono font-black uppercase tracking-widest shadow-[0_0_14px_rgba(184,227,81,0.55)]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-black mk-blink" />
+                  Soon
+                </div>
 
-                  {/* expanding panel */}
-                  <div
-                    id={`why-panel-${idx}`}
-                    role="region"
-                    aria-hidden={!open}
-                    style={{
-                      display: 'grid',
-                      gridTemplateRows: open ? '1fr' : '0fr',
-                      transition: reduced ? 'none' : `grid-template-rows 600ms ${EASE}`,
-                    }}
-                  >
-                    <div className="overflow-hidden">
-                      <div
-                        className="px-5 pb-5 pt-1 sm:pl-[74px]"
-                        style={{
-                          opacity: open ? 1 : 0,
-                          transform: open ? 'translateY(0)' : 'translateY(-8px)',
-                          transition: reduced
-                            ? 'none'
-                            : `opacity 450ms ease ${open ? 200 : 0}ms, transform 500ms ${EASE} ${open ? 200 : 0}ms`,
-                        }}
-                      >
-                        <p className="text-xs sm:text-[13px] text-zinc-300 font-sans leading-relaxed">
-                          {item.description}
-                        </p>
-                        <div className="mt-4 flex items-center gap-3">
-                          <span
-                            aria-hidden="true"
-                            className="h-px bg-gradient-to-r from-[#B8E351] to-transparent"
-                            style={{
-                              width: open ? 48 : 0,
-                              transition: reduced ? 'none' : `width 700ms ${EASE} ${open ? 350 : 0}ms`,
-                            }}
-                          />
-                          <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-[#030602]/90 border border-[#23430C] text-[10px] font-mono font-bold text-[#B8E351]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#B8E351] animate-pulse" />
-                            {item.stat}
-                          </span>
-                        </div>
-                      </div>
+                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-zinc-500">
+                  <Lock className="w-3 h-3" />
+                  <span>Locked // Opening soon</span>
+                </div>
+
+                <div
+                  className="mt-3 font-display font-black text-4xl sm:text-5xl tracking-tight"
+                  style={{ color: p.tint, textShadow: `0 0 28px ${p.tint}55` }}
+                >
+                  {p.name}
+                </div>
+
+                <p className="mt-2 text-xs sm:text-sm text-zinc-300 font-sans leading-snug">{p.blurb}</p>
+
+                {/* progress */}
+                <div className="mt-5">
+                  <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider mb-1.5">
+                    <span className="text-zinc-400">{p.status}</span>
+                    <span style={{ color: p.tint }}>{p.progress}%</span>
+                  </div>
+                  <div className="relative h-2 rounded-full bg-[#0d1a08] border border-[#23430C] overflow-hidden">
+                    <div
+                      className="absolute inset-y-0 left-0 rounded-full overflow-hidden"
+                      style={{
+                        width: inView ? `${p.progress}%` : '0%',
+                        background: `linear-gradient(90deg, ${p.tint}99, ${p.tint})`,
+                        boxShadow: `0 0 12px ${p.tint}88`,
+                        transition: `width 1600ms ${EASE} ${400 + i * 200}ms`,
+                      }}
+                    >
+                      <div className="mk-shimmer absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/50 to-transparent" />
                     </div>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
+
+        {/* footer row */}
+        {/* <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2 text-xs font-mono text-[#B8E351]">
+            <Sparkles className="w-4 h-4" />
+            <span className="font-bold uppercase tracking-wider">
+              Want it sooner? Work with us directly today.
+            </span>
+          </div>
+
+          <a
+            href="#contact"
+            onClick={() => sound.playConfirm()}
+            className="px-6 py-3 rounded-xl bg-[#B8E351] hover:bg-[#d0f671] text-black font-bold text-xs font-mono uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(184,227,81,0.5)] shrink-0 flex items-center gap-2 cursor-pointer active:scale-95"
+          >
+            <Bell className="w-4 h-4" />
+            <span>Get Notified At Launch</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </div> */}
       </div>
     </div>
   );
@@ -754,7 +702,7 @@ export const SquadSection: React.FC = () => {
     ['Role', shown.role],
     ['Degree', shown.degree],
     ['Focus', shown.tagline],
-    ['Ownership', '100% code & IP handover'],
+    ['About', shown.bio],
   ];
 
   return (
@@ -779,7 +727,7 @@ export const SquadSection: React.FC = () => {
                 <span className="relative w-2.5 h-2.5 rounded-full bg-[#B8E351]" />
               </span>
               <span>
-                03 // Core Squad // Online
+                Core TEAM // Online
                 <span className="hidden sm:inline"> · 4/4 Founders Ready</span>
               </span>
             </div>
@@ -1154,39 +1102,9 @@ export const SquadSection: React.FC = () => {
         </div>
 
         {/* ================================================================= */}
-        {/* 2. WHY YOU NEED TO CHOOSE US                                      */}
+        {/* 2. MARKETPLACE COMING SOON                                        */}
         {/* ================================================================= */}
-        <div className="relative mb-14 text-left">
-          <RobotAnchor x="96%" y="6%" scale={0.3} />
-          <WhyChooseUs />
-        </div>
-
-        {/* ================================================================= */}
-        {/* 3. COLLECTIVE STATEMENT & CTA BANNER  (unchanged)                 */}
-        {/* ================================================================= */}
-        <div className="rounded-2xl border border-[#23430C] bg-[#070b04]/80 p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 text-left">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#B8E351]">
-              <Sparkles className="w-4 h-4 text-[#B8E351]" />
-              <span className="font-bold">READY TO BUILD WITH US?</span>
-            </div>
-            <h4 className="text-lg sm:text-xl font-bold font-display text-white">
-              Work Directly With Agasthi, Gavin, Thamidu & Odhisha
-            </h4>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans">
-              Send us your project scope or architectural requirements. We reply with a detailed technical feasibility review and fixed quote within 24 hours.
-            </p>
-          </div>
-
-          <a
-            href="#contact"
-            onClick={() => sound.playConfirm()}
-            className="px-6 py-3 rounded-xl bg-[#B8E351] hover:bg-[#d0f671] text-black font-bold text-xs font-mono uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(184,227,81,0.5)] shrink-0 flex items-center gap-2 cursor-pointer active:scale-95"
-          >
-            <span>Message The Team</span>
-            <ArrowRight className="w-4 h-4" />
-          </a>
-        </div>
+        <MarketplaceSoon />
 
       </div>
     </section>
