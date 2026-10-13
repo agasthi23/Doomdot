@@ -27,10 +27,10 @@ const WHY_CHOOSE_US = [
   },
   {
     icon: <ShieldCheck className="w-5 h-5 text-[#B8E351]" />,
-    title: 'Software Engineering Rigor',
+    title: 'Software Engineering Excellence',
     description:
       "We don't just hack things together. We apply rigorous computer science principles to build secure, scalable, and battle-tested software architectures that last.",
-    stat: 'SE + CS DEGREES COMBINED',
+    stat: 'NO HACKS. NO SHORTCUTS. NO REGRETS.',
   },
 ];
 
@@ -137,9 +137,10 @@ function useScrollHide<T extends HTMLElement, C extends HTMLElement>() {
 /* Why Choose Us (circular layout + expandable pills)                  */
 /* ------------------------------------------------------------------ */
 
-// px push to the right on desktop. All 0 = clean aligned column.
-// Want the arc look again? use [0, 56, 56, 0]
-const PILL_OFFSETS = [0, 0, 0, 0];
+// px push to the right on desktop. Outer pills stay put, middle pills
+// are pushed right, so the left edges form a gentle arc around the circle.
+// Gentler: [0, 40, 40, 0]  |  Stronger: [0, 72, 72, 0]
+const PILL_OFFSETS = [0, 20, 20, 0];
 
 export const WhyChooseUs: React.FC = () => {
   const reduced = prefersReducedMotion();
@@ -290,7 +291,7 @@ export const WhyChooseUs: React.FC = () => {
                           onMouseEnter={() => !open && sound.playHover()}
                           aria-expanded={open}
                           aria-controls={`why-panel-${idx}`}
-                          className="w-full flex items-center gap-4 p-2.5 pr-5 text-left rounded-[28px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351]"
+                          className="w-full flex items-center gap-4 p-2.5 pr-5 text-left rounded-[28px] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B8E351]"
                         >
                           <span
                             className={`shrink-0 w-12 h-12 rounded-full border flex items-center justify-center transition-all duration-500 ${

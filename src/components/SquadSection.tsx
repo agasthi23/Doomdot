@@ -24,7 +24,11 @@ interface TeamMember {
   discipline: 'SE' | 'CS';
   degree: string;
   initials: string;
+  /** Shown in the "Focus" row: the founder's main services from the Services page. */
   tagline: string;
+  /** Short description shown in the "About" row. */
+  bio: string;
+  /** Tech tags matching the Focus services. */
   specialties: string[];
   github: string;
   linkedin: string;
@@ -44,8 +48,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'SE',
     degree: 'B.Sc. Software Engineering',
     initials: 'AS',
-    tagline: 'Modern Web Architectures & Client Systems',
-    specialties: ['TypeScript', 'Next.js 15', 'React 19', 'PostgreSQL', 'Tailwind'],
+    tagline: 'Front-End Development & UI/UX · Full-Stack Web Applications · Custom Software Applications',
+    bio: 'Co-Founder of DoomDot, responsible for front-end development and user interface design, with a focus on delivering polished and high-performing digital products.',
+    specialties: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'C#', '.NET', 'Java',],
     github: 'https://github.com/agasthi23',
     linkedin: 'https://www.linkedin.com/in/agasthi-i-silva/',
     tint: '#B8E351',
@@ -61,8 +66,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'SE',
     degree: 'B.Sc. Software Engineering',
     initials: 'GR',
-    tagline: 'Distributed Systems & Scalable Cloud APIs',
-    specialties: ['Go', 'Node.js', 'PostgreSQL', 'Redis', 'Docker'],
+    tagline: 'Back-End Engineering & Scalable APIs · Full-Stack Web Applications · Mobile Applications',
+    bio: 'Co-Founder of DoomDot, responsible for back-end architecture and API development, ensuring that developing systems remain secure, reliable, and scalable.',
+    specialties: ['Node.js', 'Express', 'MongoDB', 'Redis', 'Docker', 'TypeScript', 'NativeWind', 'Next.js'],
     github: 'https://github.com/GavinRanasinghe29870',
     linkedin: 'https://www.linkedin.com/in/gavin-ranasinghe-585183323/',
     tint: '#6EE7A8',
@@ -78,8 +84,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'CS',
     degree: 'B.Sc. Computer Science',
     initials: 'TS',
-    tagline: 'Intelligent Workflows & Machine Algorithms',
-    specialties: ['Python', 'FastAPI', 'Gemini API', 'Qdrant'],
+    tagline: 'Custom Software Applications · Back-End Engineering & Scalable APIs · Mobile Applications',
+    bio: 'Co-Founder of DoomDot, responsible for custom software development, applying strong problem-solving skills to build dependable, business-focused solutions.',
+    specialties: ['Python', 'C#', '.NET', 'Java', 'PostgreSQL', 'Docker', 'NativeWind'],
     github: 'https://github.com/Thamindu3',
     linkedin: 'https://www.linkedin.com/in/thamindu-samarathunga-29546a26b',
     tint: '#5EEAD4',
@@ -95,8 +102,9 @@ const TEAM_MEMBERS: TeamMember[] = [
     discipline: 'CS',
     degree: 'B.Sc. Computer Science',
     initials: 'OR',
-    tagline: 'Platform Security & Interactive 3D WebGL',
-    specialties: ['OAuth 2.0', 'Three.js', 'Webhooks', 'React'],
+    tagline: 'Full-Stack Web Applications · Mobile Applications · Front-End Development & UI/UX',
+    bio: 'Co-Founder of DoomDot, responsible for full-stack web and mobile development, overseeing projects from initial planning through to final delivery.',
+    specialties: ['React', 'Node.js', 'MongoDB', 'Stripe', 'React Native', 'Expo', 'NativeWind'],
     github: 'https://github.com/odishaa',
     linkedin: 'https://www.linkedin.com/in/odisha-rathnayake-rm2002/',
     tint: '#E4FF7A',
@@ -694,7 +702,7 @@ export const SquadSection: React.FC = () => {
     ['Role', shown.role],
     ['Degree', shown.degree],
     ['Focus', shown.tagline],
-    ['Ownership', '100% code & IP handover'],
+    ['About', shown.bio],
   ];
 
   return (
@@ -719,7 +727,7 @@ export const SquadSection: React.FC = () => {
                 <span className="relative w-2.5 h-2.5 rounded-full bg-[#B8E351]" />
               </span>
               <span>
-                Core Squad // Online
+                Core TEAM // Online
                 <span className="hidden sm:inline"> · 4/4 Founders Ready</span>
               </span>
             </div>
