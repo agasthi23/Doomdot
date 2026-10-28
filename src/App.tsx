@@ -54,6 +54,33 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHash);
   }, [currentView]);
 
+  // Dynamically update URL hash as user scrolls through sections
+  useEffect(() => {
+    if (currentView !== 'home') return;
+
+    const sections = document.querySelectorAll('section[id]');
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            if (id && window.location.hash !== `#${id}`) {
+              window.history.replaceState(null, '', `#${id}`);
+            }
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
+  }, [currentView]);
+
   const handleOpenTerminal = () => setTerminalOpen(true);
   const handleCloseTerminal = () => setTerminalOpen(false);
   const handleCrack = useCallback(() => setStage('intro'), [setStage]);
