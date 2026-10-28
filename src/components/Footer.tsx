@@ -87,27 +87,27 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
     {
       name: 'Instagram',
       icon: InstagramIcon,
-      href: 'https://instagram.com',
+      href: 'https://www.instagram.com/doomdotz/',
     },
     {
       name: 'LinkedIn',
       icon: Linkedin,
-      href: 'https://linkedin.com',
+      href: 'https://www.linkedin.com/in/doom-dot/',
     },
     {
       name: 'TikTok',
       icon: TikTokIcon,
-      href: 'https://tiktok.com',
+      href: 'https://www.tiktok.com/@doomdotz',
     },
     {
       name: 'Facebook',
       icon: FacebookIcon,
-      href: 'https://facebook.com',
+      href: 'https://www.facebook.com/profile.php?id=61595606400880',
     },
     {
       name: 'GitHub',
       icon: Github,
-      href: 'https://github.com',
+      href: 'https://github.com/Doomdot12',
     },
   ];
 
@@ -129,12 +129,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
               Digital Engineering Studio. We build fast,reliable,
               production-ready software.
             </p>
-
-            {/*
-            <div className="pt-1 text-[11px] text-zinc-500">
-              Digital Engineering Studio · 2 SE + 2 CS Architects
-            </div>
-            */}
           </div>
 
           {/* Navigation Column */}
@@ -183,22 +177,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
                   Contact Us
                 </a>
               </li>
-
-              {/*
-              <li>
-                <button
-                  type="button"
-                  onClick={() => {
-                    sound.playClick();
-                    onOpenTerminal();
-                  }}
-                  className="inline-flex items-center gap-1 text-[#B8E351] transition-colors hover:text-white"
-                >
-                  <Terminal className="h-3.5 w-3.5" />
-                  <span>CLI [~]</span>
-                </button>
-              </li>
-              */}
             </ul>
           </div>
 
@@ -306,13 +284,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenTerminal }) => {
           </div>
 
           <div className="flex items-center gap-4">
-            {/*
-            <span aria-hidden="true" className="text-[#23430C]">
-              ///
-            </span>
-            <span>Upwork Top-Rated &amp; Fiverr Pro Verified</span>
-            */}
-
             <span className="flex items-center gap-2">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#B8E351] opacity-75" />
