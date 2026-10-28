@@ -18,6 +18,7 @@ import type { Stage } from './components/RobotCompanion.tsx';
 import { StatsSection } from './components/StatsSection.tsx';
 import { TechStackShowcase } from './components/TechStackShowcase.tsx';
 import WhyChooseUs from './components/WhyChooseUs.tsx';
+import { ProjectsShowcase } from './components/ProjectsShowcase.tsx';
 
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'services-extended'>('home');
@@ -51,6 +52,33 @@ export default function App() {
 
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
+  }, [currentView]);
+
+  // Dynamically update URL hash as user scrolls through sections
+  useEffect(() => {
+    if (currentView !== 'home') return;
+
+    const sections = document.querySelectorAll('section[id]');
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            if (id && window.location.hash !== `#${id}`) {
+              window.history.replaceState(null, '', `#${id}`);
+            }
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, [currentView]);
 
   const handleOpenTerminal = () => setTerminalOpen(true);
@@ -158,6 +186,8 @@ export default function App() {
           <SquadSection />
 
           <WhyChooseUs />
+
+          <ProjectsShowcase />
 
           <TechStackShowcase />
 
