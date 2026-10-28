@@ -44,7 +44,7 @@ interface Project {
   /** Screenshots are joined top to bottom and slide as one photo. Put them in /public/projects/ */
   images: string[];
   /** Optional source code link */
-  repo?: string;
+  // repo?: string;
 }
 
 // TODO: replace these placeholders with your real projects
@@ -69,7 +69,7 @@ const PROJECTS: Project[] = [
       '/projects/Utilyze3.jpeg',
       '/projects/Utilyze4.jpeg',
     ],
-    repo: 'https://github.com/your-org/utilyze',
+    // repo: 'https://github.com/your-org/utilyze',
   },
   {
     id: 'nilminismartdine',
@@ -116,7 +116,7 @@ const PROJECTS: Project[] = [
     ],
     tech: ['Flutter', 'Dart', 'Firebase', 'Cloud Firestore', 'Stripe', 'WhatsApp API'],
     images: ['/projects/NIlminiApp1.png', '/projects/NIlminiApp2.png', '/projects/NIlminiApp3.png', '/projects/NIlminiApp4.png', '/projects/NIlminiApp5.png'],
-    repo: 'https://github.com/your-org/tripmate',
+    // repo: 'https://github.com/your-org/tripmate',
   },
 ];
 
@@ -1009,7 +1009,7 @@ const ProjectSlide: React.FC<{
           </div>
         </div>
 
-        {project.repo && (
+        {/* {project.repo && (
           <div style={text(680)} className="mt-6">
             <a
               href={project.repo}
@@ -1023,7 +1023,7 @@ const ProjectSlide: React.FC<{
               <span>View Source</span>
             </a>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
