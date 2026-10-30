@@ -36,6 +36,13 @@ export default function App() {
     return 'hidden';
   });
 
+  // Clear unwanted initial hashes (like #about) on first load, except for extended view
+  useEffect(() => {
+    if (window.location.hash && window.location.hash !== '#services-extended') {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+  }, []);
+
   // Sync hash routing so #services-extended opens the page directly
   useEffect(() => {
     const handleHash = () => {
@@ -65,7 +72,8 @@ export default function App() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             const id = entry.target.getAttribute('id');
-            if (id && window.location.hash !== `#${id}`) {
+            // Prevent writing #about into the URL if an about section exists or is triggered
+            if (id && id !== 'about' && window.location.hash !== `#${id}`) {
               window.history.replaceState(null, '', `#${id}`);
             }
           }
